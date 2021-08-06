@@ -17,7 +17,7 @@ In http://localhost:19002/
 
 Click the option for Run on Android device/emulator, to start development.
 
-Run code on React Native.
+Edit code on VS Code
 
 
 
