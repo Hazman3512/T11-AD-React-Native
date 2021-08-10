@@ -5,7 +5,7 @@ import { globalStyles } from './styles/global';
 import { Text } from 'react-native-elements';
 
 
-export default function Search( { navigation } ){
+export default function Search( { navigation, route } ){
 
     const [data, setData] = useState([]);
     const [query, setQuery] = useState('');
@@ -77,11 +77,14 @@ export default function Search( { navigation } ){
                 </Text>
                 </TouchableOpacity>
                 } 
-/>
+              />
+              
 
                
         </View>
         </TouchableWithoutFeedback>
+
+        
     )
 }
 
