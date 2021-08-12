@@ -3,13 +3,16 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from "../context";
- 
+
 import Home from './home';
 import Search from './search';
 import WatchList from './watchList';
-import HistoryDetails from './historyDetails';
+import History from './history';
 
 const Tab = createMaterialBottomTabNavigator();
+
+
+
 
 
 export default function MainTabScreen ({ navigation }) {
@@ -59,8 +62,8 @@ export default function MainTabScreen ({ navigation }) {
                 }}
             />
             <Tab.Screen
-                name="HistoryDetails"
-                component={HistoryDetails}
+                name="History"
+                component={History}
                 options={{
                 tabBarLabel: 'History',
                 tabBarIcon: ({ color }) => (

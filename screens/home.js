@@ -22,19 +22,11 @@ export default function Home({ navigation, route }){
                 </Card.Image>
 
                 <Text style={{marginBottom: 100}}>
-                    Welcome back, Professor X. You have 0 unread messages.
+                    Welcome back, Professor X. You have 0 unread messages since you last logged in.
                     </Text>
             </Card>
 
-            <TouchableOpacity>
-                <Button
-
-                    title="Log out"
-                    onPress={() => {signOut()}} 
-
-                />  
-
-            </TouchableOpacity>
+            
 
 
             

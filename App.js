@@ -3,11 +3,10 @@ import React, { useState } from 'react';
 import Home from './screens/home';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Search from './screens/search';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HistoryDetails from './screens/historyDetails';
 import { FontAwesome } from '@expo/vector-icons'; 
 import WatchList from './screens/watchList';
 import SignIn from './screens/signIn';
@@ -17,14 +16,8 @@ import MainTabScreen from './screens/MainTabScreen';
 import { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native-paper';
 import { Image, StyleSheet, View, Text } from 'react-native';
-import { Button } from 'react-native-elements/dist/buttons/Button';
-import { color } from 'react-native-elements/dist/helpers';
-
-
-
-
-const Stack = createStackNavigator();
-
+import CustomNavigationBar from './screens/layout/CustomNavigationBar';
+import Register from './screens/register';
 
 
 
@@ -34,7 +27,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-
+  const Stack = createStackNavigator();
   const [isLoading, setIsLoading] = React.useState(true);
   const [ userToken, setUserToken] = React.useState(null);
   
@@ -42,12 +35,16 @@ export default function App() {
   const authContext = React.useMemo(() => ({
 
     signIn: () => {
-      setUserToken('123')
+      setUserToken('123');
       setIsLoading(false);
     },
 
     signOut: () => {
       setUserToken(null);
+      setIsLoading(false);
+    },
+    register: () => {
+      setUserToken('123');
       setIsLoading(false);
     },
   }));
@@ -74,18 +71,16 @@ export default function App() {
     return (
         <AuthContext.Provider value={authContext}>
         <NavigationContainer>
+          
           { userToken !== null ? (
-          <Stack.Navigator>
+          <Stack.Navigator
+          screenOptions={{
+            header: CustomNavigationBar,
+          }}>
             
             <Stack.Screen 
               name="Overview"  
               component={MainTabScreen}
-              options={{
-                title: 'Home',
-                headerTitleStyle: {
-                  alignItems: 'center',
-                },
-              }}
 
                 
             />
@@ -96,6 +91,9 @@ export default function App() {
         <Stack.Screen 
           name="Sign In" 
           component={SignIn} />
+        <Stack.Screen 
+          name="Register" 
+          component={Register} />
         </Stack.Navigator>
           }
         </NavigationContainer>

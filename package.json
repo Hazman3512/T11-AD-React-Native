@@ -8,15 +8,18 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^6.0.1",
     "@react-navigation/material-bottom-tabs": "^6.0.3",
     "@react-navigation/native": "^6.0.1",
     "@react-navigation/native-stack": "^6.0.1",
     "@react-navigation/stack": "^6.0.1",
+    "axios": "^0.21.1",
     "expo": "~42.0.1",
     "expo-app-loading": "^1.1.2",
     "expo-status-bar": "~1.0.4",
+    "native-echarts": "^0.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
@@ -27,8 +30,11 @@
     "react-native-rename": "^2.9.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
+    "react-native-svg": "^12.1.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "^0.17.1"
+    "react-native-web": "^0.17.1",
+    "react-native-webview": "11.6.2",
+    "victory-native": "^35.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

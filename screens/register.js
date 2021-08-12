@@ -3,14 +3,17 @@ import {   StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 
-export default function SignIn({ navigation }){
-    
-    const { signIn } = React.useContext(AuthContext);
+
+export default function Register({navigation}){
+
+    const { register } = React.useContext(AuthContext);
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    
-    return(
-            <View style={styles.container}>
+
+
+    return (
+
+        <View style={styles.container}>
                 
                 <TextInput style={{marginTop:20}}
                     label="E-mail"
@@ -31,29 +34,27 @@ export default function SignIn({ navigation }){
                     
                     mode="contained"
                     color="white"
-                    onPress={() => {signIn()}} 
+                    onPress={() => {register()}} 
 
-                >Login
+                >Register
                 </Button>  
 
                 </TouchableOpacity>
 
-                 <Text style={styles.register}>Don't have an account yet? </Text>
+                 <Text style={styles.register}>Already have an account? </Text>
                  <TouchableOpacity>
                  <Button 
                     mode="text" 
                     style={{marginTop:20}}
-                    onPress={() => navigation.navigate('Register')}
-                    >Register here</Button>
+                    onPress={() => navigation.navigate('Sign In')}
+                    >Login here</Button>
                  </TouchableOpacity>     
                 
             </View>
 
 
 
-
-    );
-
+    )
 
 
 }
