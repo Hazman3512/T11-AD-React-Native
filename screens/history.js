@@ -1,13 +1,9 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { VictoryAxis, VictoryCandlestick,VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
+import {Subheading,Text, Card, Title, Paragraph } from "react-native-paper";
 
-const data = [
-  { quarter: 1, earnings: 13000 },
-  { quarter: 2, earnings: 16500 },
-  { quarter: 3, earnings: 14250 },
-  { quarter: 4, earnings: 19000 }
-];
+
+
 
 export default function History({ navigation }){
 
@@ -16,18 +12,28 @@ export default function History({ navigation }){
 
 
         <View style={styles.container}>
-            <VictoryChart
-                theme={VictoryTheme.material}
-                domainPadding={{ x: 25 }}
-                scale={{ x: "time" }}
-                >
-                <VictoryAxis tickFormat={(t) => `${t.getDate()}/${t.getMonth()}`}/>
-                <VictoryAxis dependentAxis/>
-                <VictoryCandlestick
-                candleColors={{ positive: "#5f5c5b", negative: "#c43a31" }}
-                //data={sampleDataDates}
-                />
-                </VictoryChart>
+          <Title style={{paddingTop:250}}>Alert History</Title>
+          <Card style={{marginBottom:20}} >
+            
+            <Card.Content>
+              <Title>1/11/2021 5pm est</Title>
+              <Paragraph>AAPL - formed bullish engulfing pattern</Paragraph>
+              <Paragraph>BYND - formed bearish engulfing pattern</Paragraph>
+            </Card.Content>
+            
+            
+          </Card>
+
+          <Card style={{paddingTop:30}} >
+            
+            <Card.Content>
+              <Title>1/15/2021 6pm est</Title>
+              <Paragraph>AAPL - formed bullish engulfing pattern</Paragraph>
+              <Paragraph>BYND - formed bearish engulfing pattern</Paragraph>
+            </Card.Content>
+            
+            
+          </Card>
         </View>
     )
 
@@ -38,9 +44,9 @@ export default function History({ navigation }){
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      flex:0.3,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#f5fcff"
+      
     }
   });
