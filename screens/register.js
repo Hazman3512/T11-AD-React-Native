@@ -7,6 +7,7 @@ import { AuthContext } from "../context";
 export default function Register({navigation}){
 
     const { register } = React.useContext(AuthContext);
+    const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -14,26 +15,37 @@ export default function Register({navigation}){
     return (
 
         <View style={styles.container}>
-                
-                <TextInput style={{marginTop:20}}
-                    label="E-mail"
-                    value={email}
-                    onChangeText={email => setEmail(email)}
+
+                <TextInput style={{marginTop:50,paddingHorizontal:10}}
+                    label="Username"
+                    value={username}
+                    mode='outlined'
+                    onChangeText={username => setUsername(username)}
                 />
 
-                <TextInput style={{marginTop:20}}
+                <TextInput style={{marginTop:20,paddingHorizontal:10}}
                     label="Password"
+                    mode='outlined'
                     value={password}
                     onChangeText={password => setPassword(password)}
                     secureTextEntry
                     right={<TextInput.Icon name="eye" />}
                 />
+                
+                <TextInput style={{marginTop:20,paddingHorizontal:10}}
+                    label="E-mail"
+                    value={email}
+                    mode='outlined'
+                    onChangeText={email => setEmail(email)}
+                />
+
+                
 
                 <TouchableOpacity onPress={() => console.log("clicked")}>
-                <Button style={{marginTop:20}}
+                <Button style={{marginTop:40,marginHorizontal:10}}
                     
                     mode="contained"
-                    color="white"
+                    color="#1e3a8a"
                     onPress={() => {register()}} 
 
                 >Register
@@ -43,7 +55,8 @@ export default function Register({navigation}){
 
                  <Text style={styles.register}>Already have an account? </Text>
                  <TouchableOpacity>
-                 <Button 
+                 <Button
+                    color="#1e3a8a"
                     mode="text" 
                     style={{marginTop:20}}
                     onPress={() => navigation.navigate('Sign In')}
@@ -62,6 +75,7 @@ export default function Register({navigation}){
 const styles = StyleSheet.create({
     container:{
         flex:1,
+        backgroundColor:'white'
     },
     register:{
         textAlign: 'center',

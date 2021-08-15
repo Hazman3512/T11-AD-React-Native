@@ -90,7 +90,13 @@ export default function App() {
         <Stack.Navigator>
         <Stack.Screen 
           name="Sign In" 
-          component={SignIn} />
+          component={SignIn}
+          options={{
+            
+            headerTitleStyle:{
+              alignSelf:'center'
+            },
+          }} />
         <Stack.Screen 
           name="Register" 
           component={Register} />

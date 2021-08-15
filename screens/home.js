@@ -11,7 +11,7 @@ export default function Home({ navigation, route }){
 
    
     return(
-        <View style={{flex:1, alignItems: 'center', justifyContent:'center'}}>
+        <View style={{flex:1, alignItems: 'center', justifyContent:'center', backgroundColor:'white'}}>
             
             
             <Card>

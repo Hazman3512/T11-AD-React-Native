@@ -1,7 +1,7 @@
 import React from 'react';
-import {Button,Text, View} from 'react-native';
+import {Text, View, TouchableOpacity} from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { Searchbar } from 'react-native-paper';
+import { Button,Searchbar } from 'react-native-paper';
 
 
 export default function Search({navigation, route}) {
@@ -13,9 +13,10 @@ export default function Search({navigation, route}) {
 
 
     return (
-      <TouchableWithoutFeedback>
-        <View>
+      
+        <View style={{flex:1,backgroundColor:'white'}} >
         <Searchbar
+        style={{borderRadius:5}}
         placeholder="Search Stocks"
         onChangeText={onChangeSearch}
         value={searchQuery}
@@ -26,26 +27,9 @@ export default function Search({navigation, route}) {
 
         </View>
 
-        <View>
-            
-            <Button
-              title="Pass data to watchlist"
-              onPress={() => {
-                /* 1. Navigate to the Watchlist route with params */
-                navigation.navigate('Watchlist', {
-                  itemId: 1,
-                  otherParam: 'AAPL',
-                  anotherParam: '145.86'
-                });
-              }}
-            />
+        
 
-          
-        </View>
-
-
-      </TouchableWithoutFeedback>
-
+     
     )
 
 }
