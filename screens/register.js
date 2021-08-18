@@ -1,20 +1,44 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {   StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text, Button, TextInput } from 'react-native-paper';
+import {List , Menu, Divider,Provider, Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
+import DropDown from "react-native-paper-dropdown";
+import UserService from "../services/UserService";
 
 
 export default function Register({navigation}){
 
+    
     const { register } = React.useContext(AuthContext);
+    const [registration,setregistration]=useState(false);
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    
+    //to put handleSubmit in onPress for Register button
+    // const handleSubmit = () => {
+    //     const newuser = {username:username,password:password,email:email};
+    //     console.log(JSON.stringify(newuser));
+    //     UserService.addUser(newuser).then(res=>(registerSuccessOrFail(res)))
+    // };
+
+    // const registerSuccessOrFail=(response)=>{
+    //     if(response.status===200){
+    //       setregister(true);
+    //       navigation.navigate("Home");
+    //     }
+    //     else{
+    //       console.log(response.status);
+          
+    //     }
+    //     return;
+    //   };
 
 
     return (
+        <Provider>
 
-        <View style={styles.container}>
+            <View style={styles.container}>
 
                 <TextInput style={{marginTop:50,paddingHorizontal:10}}
                     label="Username"
@@ -38,6 +62,10 @@ export default function Register({navigation}){
                     mode='outlined'
                     onChangeText={email => setEmail(email)}
                 />
+
+                
+        
+                
 
                 
 
@@ -64,6 +92,7 @@ export default function Register({navigation}){
                  </TouchableOpacity>     
                 
             </View>
+        </Provider>
 
 
 
