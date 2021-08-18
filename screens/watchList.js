@@ -1,8 +1,8 @@
 import React from 'react';
 import { Keyboard, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { globalStyles } from './styles/global';
-import { Button,Searchbar, DataTable } from 'react-native-paper';
-import { Text } from 'react-native-elements';
+import { Searchbar, DataTable } from 'react-native-paper';
+import { Button,Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -43,7 +43,11 @@ export default function WatchList({ navigation, route }){
             <DataTable.Cell numeric>35.03</DataTable.Cell>
             <DataTable.Cell numeric>
                 <TouchableOpacity>
-                    <Button  color="#1e3a8a" icon="delete" title=""></Button>
+                    <Button  icon={{
+                            name: "settings",
+                            size: 25,
+                            color: "#1e3a8a"
+                        }} title="" type="clear"></Button>
                 </TouchableOpacity>
                 
                 
@@ -57,8 +61,11 @@ export default function WatchList({ navigation, route }){
             <DataTable.Cell numeric>42.12</DataTable.Cell>
             <DataTable.Cell numeric>
             <TouchableOpacity>
-                    <Button color="#1e3a8a" icon="delete" title=""></Button>
-                    
+                    <Button  icon={{
+                            name: "settings",
+                            size: 25,
+                            color: "#1e3a8a"
+                        }} title="" type="clear"></Button>
             </TouchableOpacity>
 
             </DataTable.Cell>
@@ -68,10 +75,13 @@ export default function WatchList({ navigation, route }){
             <DataTable.Cell>Tesla</DataTable.Cell>
             <DataTable.Cell numeric>45.56</DataTable.Cell>
             <DataTable.Cell numeric>
-                <TouchableOpacity>
-                        <Button  color="#1e3a8a" icon="delete" title=""></Button>
-                        
-                </TouchableOpacity>
+            <TouchableOpacity>
+                    <Button  icon={{
+                            name: "settings",
+                            size: 25,
+                            color: "#1e3a8a"
+                        }} title="" type="clear"></Button>
+            </TouchableOpacity>
 
             </DataTable.Cell>
         </DataTable.Row>
@@ -80,10 +90,13 @@ export default function WatchList({ navigation, route }){
             <DataTable.Cell>Sofi Tech</DataTable.Cell>
             <DataTable.Cell numeric>16.65</DataTable.Cell>
             <DataTable.Cell numeric>
-                <TouchableOpacity>
-                    <Button  color="#1e3a8a" icon="delete" title=""></Button>
-                            
-                </TouchableOpacity>
+            <TouchableOpacity>
+                    <Button  icon={{
+                            name: "settings",
+                            size: 25,
+                            color: "#1e3a8a"
+                        }} title="" type="clear"></Button>
+            </TouchableOpacity>
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
@@ -91,10 +104,13 @@ export default function WatchList({ navigation, route }){
             <DataTable.Cell>Beyond Meat</DataTable.Cell>
             <DataTable.Cell numeric>0.78</DataTable.Cell>
             <DataTable.Cell numeric>
-                <TouchableOpacity>
-                    <Button color="#1e3a8a" icon="delete" title=""></Button>
-                                
-                </TouchableOpacity>
+            <TouchableOpacity>
+                    <Button  icon={{
+                            name: "settings",
+                            size: 25,
+                            color: "#1e3a8a"
+                        }} title="" type="clear"></Button>
+            </TouchableOpacity>
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
@@ -102,10 +118,13 @@ export default function WatchList({ navigation, route }){
             <DataTable.Cell>Shift Tech</DataTable.Cell>
             <DataTable.Cell numeric>150.34</DataTable.Cell>
             <DataTable.Cell  numeric >
-                <TouchableOpacity>
-                        <Button color="#1e3a8a"  icon="delete" title=""></Button>
-                                  
-                </TouchableOpacity>
+            <TouchableOpacity>
+                    <Button  icon={{
+                            name: "settings",
+                            size: 25,
+                            color: "#1e3a8a"
+                        }} title="" type="clear"></Button>
+            </TouchableOpacity>
                 
                 
 
