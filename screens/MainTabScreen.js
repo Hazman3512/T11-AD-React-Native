@@ -3,8 +3,7 @@ import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from "../context";
-
-import Home from './home';
+import CustomNavigationBar from './layout/CustomNavigationBar';
 import Search from './search';
 import WatchList from './watchList';
 import History from './history';
@@ -26,25 +25,10 @@ export default function MainTabScreen ({ navigation }) {
             barStyle={{ backgroundColor: 'white' }}
     >
             <Tab.Screen
-                name="Home"
-                component={Home}
-                options={{
-                        
-                        headerRight: () => (
-                          <Text
-                            onPress={() => {signOut()}}
-                            title="Log out" />
-                        ),
-                tabBarLabel: 'Home',
-                tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name="home" color={color} size={26} />
-                ),
-                }}
-            />
-            <Tab.Screen
                 name="Search"
                 component={Search}
                 options={{
+                header: CustomNavigationBar,
                 tabBarLabel: 'Search',
                 tabBarIcon: ({ color }) => (
                     <MaterialCommunityIcons name="magnify" color={color} size={26} />

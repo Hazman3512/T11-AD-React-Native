@@ -1,6 +1,7 @@
 import React from 'react';
 import { Appbar } from 'react-native-paper';
 import { AuthContext } from '../../context';
+import SignIn from '../signIn';
 
 function CustomNavigationBar({ navigation, previous }) {
     const { signOut } = React.useContext(AuthContext);
@@ -11,7 +12,7 @@ function CustomNavigationBar({ navigation, previous }) {
           >
           
         <Appbar.Content title="Overview" />
-        <Appbar.Action icon="logout" onPress={() => {signOut()}} />
+        <Appbar.Action icon="logout" onPress={() => navigation.navigate('Sign In')} />
       </Appbar.Header>
     );
   }
