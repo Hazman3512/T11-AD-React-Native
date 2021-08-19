@@ -1,14 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import Home from './screens/home';
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Search from './screens/search';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome } from '@expo/vector-icons'; 
-import WatchList from './screens/watchList';
 import SignIn from './screens/signIn';
 import { AuthContext } from "./context";
 import { createStackNavigator } from '@react-navigation/stack';

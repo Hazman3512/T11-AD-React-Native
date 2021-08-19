@@ -2,10 +2,9 @@ import React, {useState} from 'react';
 import {   StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
-import { Input } from 'react-native-elements';
 import UserService from "../services/UserService";
-import { Formik } from 'formik';
-import MainTabScreen from './MainTabScreen';
+import { Avatar } from "react-native-elements";
+
 
 export default function SignIn({ navigation }){
     
@@ -41,6 +40,15 @@ const handleSubmit = async ()  => {
     return(
         
             <View style={styles.container}>
+
+                <Avatar
+                size="medium"
+                rounded
+                icon={{name: 'lock', type: 'material-icons-outlined'}}
+                activeOpacity={0.7}
+                overlayContainerStyle={{backgroundColor: "#1bbd7e"}}
+                containerStyle={{alignSelf:'center', marginTop: 50,textAlign: 'center'}}
+                />
                 
                 <TextInput style={{marginTop:50,paddingHorizontal:10}}
                     label="Username"
