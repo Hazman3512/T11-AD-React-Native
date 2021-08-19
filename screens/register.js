@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import {   StyleSheet, TouchableOpacity, View } from 'react-native';
-import {List , Menu, Divider,Provider, Text, Button, TextInput } from 'react-native-paper';
+import {Title,Provider, Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
-import DropDown from "react-native-paper-dropdown";
-import UserService from "../services/UserService";
+import { Avatar } from "react-native-elements";
 
 
 export default function Register({navigation}){
@@ -14,6 +13,7 @@ export default function Register({navigation}){
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [confirmPassword,setConfirmPassword] = React.useState('');
     
     //to put handleSubmit in onPress for Register button
     // const handleSubmit = () => {
@@ -40,11 +40,29 @@ export default function Register({navigation}){
 
             <View style={styles.container}>
 
+                <Avatar
+                size="medium"
+                rounded
+                icon={{name: 'menu-book', type: 'material-icons-outlined'}}
+                activeOpacity={0.7}
+                overlayContainerStyle={{backgroundColor: "#ffcc00"}}
+                containerStyle={{alignSelf:'center', marginTop: 50,textAlign: 'center'}}
+                />
+
+                <Title style={{alignSelf:'center',marginTop:20}}>Register</Title>
+
                 <TextInput style={{marginTop:50,paddingHorizontal:10}}
                     label="Username"
                     value={username}
                     mode='outlined'
                     onChangeText={username => setUsername(username)}
+                />
+
+                <TextInput style={{marginTop:20,paddingHorizontal:10}}
+                    label="E-mail"
+                    value={email}
+                    mode='outlined'
+                    onChangeText={email => setEmail(email)}
                 />
 
                 <TextInput style={{marginTop:20,paddingHorizontal:10}}
@@ -55,13 +73,17 @@ export default function Register({navigation}){
                     secureTextEntry
                     right={<TextInput.Icon name="eye" />}
                 />
-                
+
                 <TextInput style={{marginTop:20,paddingHorizontal:10}}
-                    label="E-mail"
-                    value={email}
+                    label="Confirm Password"
                     mode='outlined'
-                    onChangeText={email => setEmail(email)}
+                    value={confirmPassword}
+                    onChangeText={confirmPassword => setConfirmPassword(confirmPassword)}
+                    secureTextEntry
+                    right={<TextInput.Icon name="eye" />}
                 />
+                
+                
 
                 
         

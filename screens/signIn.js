@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {   StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text, Button, TextInput } from 'react-native-paper';
+import { Title,Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import UserService from "../services/UserService";
 import { Avatar } from "react-native-elements";
@@ -49,6 +49,8 @@ const handleSubmit = async ()  => {
                 overlayContainerStyle={{backgroundColor: "#1bbd7e"}}
                 containerStyle={{alignSelf:'center', marginTop: 50,textAlign: 'center'}}
                 />
+
+                <Title style={{alignSelf:'center',marginTop:20}}>Sign In</Title>
                 
                 <TextInput style={{marginTop:50,paddingHorizontal:10}}
                     label="Username"

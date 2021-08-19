@@ -78,7 +78,8 @@ export default function App() {
             />
             <Stack.Screen 
           name="Sign In" 
-          component={SignIn} />
+          component={SignIn}
+          options={{headerShown: false}} />
           </Stack.Navigator>
           )
         :
@@ -88,13 +89,15 @@ export default function App() {
           component={SignIn}
           options={{
             
-            headerTitleStyle:{
-              alignSelf:'center'
-            },
+            headerShown:false
           }} />
         <Stack.Screen 
           name="Register" 
-          component={Register} />
+          component={Register}
+          options={{
+            
+            headerShown:false
+          }} />
         <Stack.Screen 
           name="MainTabScreen" 
           component={MainTabScreen}

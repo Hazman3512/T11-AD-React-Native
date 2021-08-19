@@ -4,7 +4,7 @@ import { globalStyles } from './styles/global';
 import { Searchbar, DataTable } from 'react-native-paper';
 import { Button,Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import WatchlistService from '../services/WatchlistService';
 
 export default function WatchList({ navigation, route }){
 
@@ -15,32 +15,22 @@ export default function WatchList({ navigation, route }){
     const onChangeSearch = query => setSearchQuery(query);
     
     return(
-        <TouchableWithoutFeedback onPress={() => {
-            Keyboard.dismiss();
-            console.log('dismissed keyboard')
-        }}>
+        
         <View style={{backgroundColor:'white', flex:1}}>
-        <Searchbar
-        placeholder="Search..."
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        onIconPress={()=> console.log({searchQuery})}
-        />
-
-        <Text> {searchQuery} </Text>
+        
 
         <DataTable>
-        <DataTable.Header>
+        <DataTable.Header style={{marginTop:70}}>
+            <DataTable.Title>No.</DataTable.Title>
             <DataTable.Title>Stock Ticker</DataTable.Title>
             <DataTable.Title>Company Name</DataTable.Title>
-            <DataTable.Title numeric>Price (USD)</DataTable.Title>
             <DataTable.Title  numeric>Actions</DataTable.Title>
         </DataTable.Header>
 
         <DataTable.Row>
+            <DataTable.Cell>1</DataTable.Cell>
             <DataTable.Cell>AAPL</DataTable.Cell>
             <DataTable.Cell>Apple Inc</DataTable.Cell>
-            <DataTable.Cell numeric>35.03</DataTable.Cell>
             <DataTable.Cell numeric>
                 <TouchableOpacity>
                     <Button  icon={{
@@ -56,9 +46,9 @@ export default function WatchList({ navigation, route }){
         </DataTable.Row>
 
         <DataTable.Row>
+            <DataTable.Cell>2</DataTable.Cell>
             <DataTable.Cell>PLTR</DataTable.Cell>
             <DataTable.Cell>Palantir Tech</DataTable.Cell>
-            <DataTable.Cell numeric>42.12</DataTable.Cell>
             <DataTable.Cell numeric>
             <TouchableOpacity>
                     <Button  icon={{
@@ -71,9 +61,9 @@ export default function WatchList({ navigation, route }){
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
+            <DataTable.Cell>3</DataTable.Cell>
             <DataTable.Cell>TSLA</DataTable.Cell>
             <DataTable.Cell>Tesla</DataTable.Cell>
-            <DataTable.Cell numeric>45.56</DataTable.Cell>
             <DataTable.Cell numeric>
             <TouchableOpacity>
                     <Button  icon={{
@@ -86,9 +76,9 @@ export default function WatchList({ navigation, route }){
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
+            <DataTable.Cell>4</DataTable.Cell>
             <DataTable.Cell>SOFI</DataTable.Cell>
             <DataTable.Cell>Sofi Tech</DataTable.Cell>
-            <DataTable.Cell numeric>16.65</DataTable.Cell>
             <DataTable.Cell numeric>
             <TouchableOpacity>
                     <Button  icon={{
@@ -100,9 +90,9 @@ export default function WatchList({ navigation, route }){
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
+            <DataTable.Cell>5</DataTable.Cell>
             <DataTable.Cell>BYND</DataTable.Cell>
             <DataTable.Cell>Beyond Meat</DataTable.Cell>
-            <DataTable.Cell numeric>0.78</DataTable.Cell>
             <DataTable.Cell numeric>
             <TouchableOpacity>
                     <Button  icon={{
@@ -114,9 +104,9 @@ export default function WatchList({ navigation, route }){
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
+            <DataTable.Cell>6</DataTable.Cell>
             <DataTable.Cell>SFT</DataTable.Cell>
             <DataTable.Cell>Shift Tech</DataTable.Cell>
-            <DataTable.Cell numeric>150.34</DataTable.Cell>
             <DataTable.Cell  numeric >
             <TouchableOpacity>
                     <Button  icon={{
@@ -136,7 +126,7 @@ export default function WatchList({ navigation, route }){
         
 
         </View>
-        </TouchableWithoutFeedback>
+        
     )
 }
 
