@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import { FlatList } from 'react-native';
 import { ScrollView } from 'react-native';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button, Searchbar } from 'react-native-paper';
 import ChartService from '../services/ChartService';
 
@@ -66,12 +65,41 @@ export default function Search({navigation, route}) {
         onIconPress={()=> console.log({searchQuery})}
         />
         </View>
+        {stockInfo.stockTicker ? 
+        [
         <View style = {styles.container}>
-          <Text>{stockInfo.stockTicker}</Text>
+          <Text style={stockInfo.dataSource}>Data from Yahoo Finance</Text>
+          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text>{stockInfo.companyName}</Text>
-          <Text>{stockInfo.initialPrice}</Text>
-          <Text>Sentiment: {stockInfo.sentiment}</Text> 
-          </View>
+          <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
+          <Text></Text>
+          <Text style = {styles.sentiment}>Sentiment: 
+            <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
+          </Text>
+          </View>,
+
+          <Button
+          icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
+          Add to Watchlist
+        </Button>,
+
+        <Button
+        mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
+        Show Comments
+        </Button>
+        
+        // <Button
+        //   color="#1e3a8a" 
+        //   mode="text" 
+        //   style={{marginTop:20}}
+        //   // onPress={() => navigation.navigate('Comments')}
+        //   >Comments
+        // </Button>
+        ]
+          : <View></View>
+          }
+
+          
       </ScrollView>
     );
 
@@ -80,9 +108,39 @@ export default function Search({navigation, route}) {
 const styles = StyleSheet.create({
     container: {
         marginTop: 20,
-        paddingHorizontal: 6,
+        paddingHorizontal: 10,
         flex: 1,
-        backgroundColor: "#fff",
         justifyContent: "flex-start",
     },
+    dataSource: {
+      fontSize: 10,
+      color: "gray"
+    },
+    stockTicker: {
+      fontSize: 35,
+      fontWeight: "bold"
+    },
+    initialPrice: {
+      fontSize: 20
+    },
+    sentiment: {
+      fontSize: 20
+    },
+    sentimentInner: {
+      textTransform: 'uppercase'
+    },
+    sentimentPositive: {
+      color: "green"
+    },
+    sentimentNeutral: {
+      color: "gray"
+    },
+    sentimentNegative: {
+      color: "red"
+    },
+    Btn: {
+      marginTop: 20,
+      marginHorizontal:10,
+      textTransform: "none"
+    }
 });
