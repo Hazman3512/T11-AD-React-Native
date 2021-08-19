@@ -84,6 +84,9 @@ export default function App() {
 
                 
             />
+            <Stack.Screen 
+          name="Sign In" 
+          component={SignIn} />
           </Stack.Navigator>
           )
         :
@@ -100,6 +103,12 @@ export default function App() {
         <Stack.Screen 
           name="Register" 
           component={Register} />
+        <Stack.Screen 
+          name="MainTabScreen" 
+          component={MainTabScreen}
+          options={{
+            header : CustomNavigationBar
+           }} />
         </Stack.Navigator>
           }
         </NavigationContainer>

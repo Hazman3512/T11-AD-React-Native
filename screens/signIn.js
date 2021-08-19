@@ -5,6 +5,7 @@ import { AuthContext } from "../context";
 import { Input } from 'react-native-elements';
 import UserService from "../services/UserService";
 import { Formik } from 'formik';
+import MainTabScreen from './MainTabScreen';
 
 export default function SignIn({ navigation }){
     
@@ -15,12 +16,9 @@ export default function SignIn({ navigation }){
 
     //Authentication code
     const loginSuccessOrFail=(response)=>{
-        console.log('asdf')
         if(response.status == 200){
-            console.log('hi')
           //SessionService.setSessionStorage('username', userName);
-          console.log(username);
-          navigation.navigate('Register');
+          navigation.navigate('MainTabScreen');
         }
         else{
           console.log(response.status);
@@ -35,10 +33,7 @@ export default function SignIn({ navigation }){
 const handleSubmit = async ()  => {
         //validateForm();
         const loginuser={username:username,password:password}
-        console.log(loginuser);
-        console.log("hello");
         const req = await UserService.authenticateUser(loginuser);
-        console.log(req.data);
         loginSuccessOrFail(req);
         
       }
