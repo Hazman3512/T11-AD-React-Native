@@ -13,10 +13,6 @@ import Register from './screens/register';
 
 
 
-
-
-
-
 export default function App() {
 
   const Stack = createStackNavigator();
