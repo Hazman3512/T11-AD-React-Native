@@ -1,99 +1,146 @@
-import React, {useState, useEffect} from 'react';
-import { FlatList, StyleSheet,Keyboard, View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-android';
-import { globalStyles } from './styles/global';
-import { Text } from 'react-native-elements';
+import React from 'react';
+import { useState, useEffect } from 'react'
+import { FlatList } from 'react-native';
+import { ScrollView } from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import { Button, Searchbar } from 'react-native-paper';
+import ChartService from '../services/ChartService';
 
 
-export default function Search( { navigation } ){
+export default function Search({navigation, route}) {
 
-    const [data, setData] = useState([]);
-    const [query, setQuery] = useState('');
-    const [cryptos, setCryptos] = useState([]);
 
-    const fetchData = async () => {
-    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false');
-    const json = await res.json();
-    setData(json);
-    setCryptos(json.slice());
-  };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTimer, setSearchTimer] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const onChangeSearch = query => setSearchQuery(query);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  const updateQuery = (input) => {
-    setQuery(input);
-    console.log(query);
-    setCryptos(data.slice())
+  const [stockInfo, setStockInfo] = useState({
+    stockTicker: null,
+    companyName: null,
+    initialPrice: null,
+    sentiment: null
+  });
+
+  async function getInitialPrice(ticker) {
+
+    const req = await ChartService.getLatestClosingStockPrice(ticker);
+    const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
+    const latestPrice = parseFloat(req.data.close);
+    const company = req.data.description;
+    const sentimentData = sentimentReq.data;
+
+    setIsLoading(() => {
+      setStockInfo({
+      stockTicker: ticker,
+      companyName: company,
+      initialPrice: latestPrice,
+      sentiment: sentimentData
+  });
+  return false;});
+
   }
 
-  const filterNames = (crypto) => {
-    // 1.
-    let search = query.toLowerCase().replace(/ /g,"_"); 
-    //2.
-    if(crypto.name.startsWith(search, 0)){
-       //3.
-       return formatNames(crypto);
-    }else{ 
-       //4.
-       cryptos.splice(cryptos.indexOf(crypto), 1);
-       return null;
-    }
- }
 
- const formatNames = (crypto) => {
-    let cryptoName = crypto.name;
-    return cryptoName;
- }
-
-  
-
-
-
-
-    return(
-       
-        <TouchableWithoutFeedback onPress={() => {
-            Keyboard.dismiss();
-            console.log('dismissed keyboard')
-        }}>
-        <View style={globalStyles.container}>
-            <Text h1>Search Stock</Text>
-            <SearchBar
-                onChangeText={updateQuery}
-                value={query}
-                placeholder="Search"
-            />
-            <FlatList 
-            data={cryptos} 
-            keyExtractor = {(i)=>i.id.toString()}
-            extraData = {query} 
-            renderItem = {({item}) =>
-                <TouchableOpacity onPress={() => console.log("clicked")}>
-
-                
-                <Text style={styles.flatList}>{filterNames(item)}
-                </Text>
-                </TouchableOpacity>
-                } 
-/>
-
-               
+    return (
+      <ScrollView>
+        <View style={styles.container} >
+        <Searchbar
+        style={{borderRadius:5}}
+        placeholder="Search Stocks"
+        onChangeText={(text) => {
+          if (searchTimer) {
+            clearTimeout(searchTimer);
+          }
+          setSearchQuery(text);
+          setSearchTimer(
+            setTimeout(() => {
+              getInitialPrice(text);
+            }, 2000),
+          );
+        }}
+        value={searchQuery}
+        onIconPress={()=> console.log({searchQuery})}
+        />
         </View>
-        </TouchableWithoutFeedback>
-    )
+        {stockInfo.stockTicker ? 
+        [
+        <View style = {styles.container}>
+          <Text style={stockInfo.dataSource}>Data from Yahoo Finance</Text>
+          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
+          <Text>{stockInfo.companyName}</Text>
+          <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
+          <Text></Text>
+          <Text style = {styles.sentiment}>Sentiment: 
+            <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
+          </Text>
+          </View>,
+
+          <Button
+          icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
+          Add to Watchlist
+        </Button>,
+
+        <Button
+        mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
+        Show Comments
+        </Button>
+        
+        // <Button
+        //   color="#1e3a8a" 
+        //   mode="text" 
+        //   style={{marginTop:20}}
+        //   // onPress={() => navigation.navigate('Comments')}
+        //   >Comments
+        // </Button>
+        ]
+          : <View></View>
+          }
+
+          
+      </ScrollView>
+    );
+
 }
 
-
 const styles = StyleSheet.create({
-    flatList:{
+    container: {
+        marginTop: 20,
+        paddingHorizontal: 10,
         flex: 1,
-        paddingLeft: 15, 
-        marginTop:15, 
-        paddingBottom:15,
-        fontSize: 20,
-        borderBottomColor: '#26a69a',
-        borderBottomWidth:1
+        justifyContent: "flex-start",
+    },
+    dataSource: {
+      fontSize: 10,
+      color: "gray"
+    },
+    stockTicker: {
+      fontSize: 35,
+      fontWeight: "bold"
+    },
+    initialPrice: {
+      fontSize: 20
+    },
+    sentiment: {
+      fontSize: 20
+    },
+    sentimentInner: {
+      textTransform: 'uppercase'
+    },
+    sentimentPositive: {
+      color: "green"
+    },
+    sentimentNeutral: {
+      color: "gray"
+    },
+    sentimentNegative: {
+      color: "red"
+    },
+    Btn: {
+      marginTop: 20,
+      marginHorizontal:10,
+      textTransform: "none"
     }
-  });
+});
