@@ -26,18 +26,24 @@ export default function Search({navigation, route}) {
 
   async function getInitialPrice(ticker) {
 
-    const req = await ChartService.getLatestClosingStockPrice(ticker);
-    const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
-    const latestPrice = parseFloat(req.data.close);
-    const company = req.data.description;
-    const sentimentData = sentimentReq.data;
+    // const req = await ChartService.getLatestClosingStockPrice(ticker);
+    // const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
+    // const latestPrice = parseFloat(req.data.close);
+    // const company = req.data.description;
+    // const sentimentData = sentimentReq.data;
 
     setIsLoading(() => {
       setStockInfo({
-      stockTicker: ticker,
-      companyName: company,
-      initialPrice: latestPrice,
-      sentiment: sentimentData
+      // stockTicker: ticker,
+      // companyName: company,
+      // initialPrice: latestPrice,
+      // sentiment: sentimentData
+
+      //Comment out the following if calling from API
+      stockTicker: "AAPL",
+      companyName: "Apple",
+      initialPrice: 149.9999,
+      sentiment: "neutral"
   });
   return false;});
 
@@ -68,7 +74,6 @@ export default function Search({navigation, route}) {
         {stockInfo.stockTicker ? 
         [
         <View style = {styles.container}>
-          <Text style={stockInfo.dataSource}>Data from Yahoo Finance</Text>
           <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text>{stockInfo.companyName}</Text>
           <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
@@ -84,17 +89,15 @@ export default function Search({navigation, route}) {
         </Button>,
 
         <Button
-        mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
+        mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
+        onPress={() => {
+          navigation.navigate('Comments', {
+          ticker: stockInfo.stockTicker,
+        });
+      }}
+        >
         Show Comments
         </Button>
-        
-        // <Button
-        //   color="#1e3a8a" 
-        //   mode="text" 
-        //   style={{marginTop:20}}
-        //   // onPress={() => navigation.navigate('Comments')}
-        //   >Comments
-        // </Button>
         ]
           : <View></View>
           }
@@ -111,10 +114,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         flex: 1,
         justifyContent: "flex-start",
-    },
-    dataSource: {
-      fontSize: 10,
-      color: "gray"
     },
     stockTicker: {
       fontSize: 35,
