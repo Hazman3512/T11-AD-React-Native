@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const STOCK_WATCHLIST_API_URL = "http://192.168.1.78:5000/watchlist/";
+const STOCK_WATCHLIST_API_URL = "http://192.168.1.137:5000/watchlist/";
 const CANDLE_WATCHLIST_API_URL =
-  "http://192.168.1.78:5000/watchlist/candlewatchlist/";
+  "http://192.168.1.137:5000/watchlist/candlewatchlist/";
 
 class WatchlistService {
   getStockWatchlist(user) {
