@@ -26,24 +26,24 @@ export default function Search({navigation, route}) {
 
   async function getInitialPrice(ticker) {
 
-    // const req = await ChartService.getLatestClosingStockPrice(ticker);
-    // const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
-    // const latestPrice = parseFloat(req.data.close);
-    // const company = req.data.description;
-    // const sentimentData = sentimentReq.data;
+    const req = await ChartService.getLatestClosingStockPrice(ticker);
+    const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
+    const latestPrice = parseFloat(req.data.close);
+    const company = req.data.description;
+    const sentimentData = sentimentReq.data;
 
     setIsLoading(() => {
       setStockInfo({
-      // stockTicker: ticker,
-      // companyName: company,
-      // initialPrice: latestPrice,
-      // sentiment: sentimentData
+      stockTicker: ticker,
+      companyName: company,
+      initialPrice: latestPrice,
+      sentiment: sentimentData
 
       //Comment out the following if calling from API
-      stockTicker: "AAPL",
-      companyName: "Apple",
-      initialPrice: 149.9999,
-      sentiment: "neutral"
+      // stockTicker: "AAPL",
+      // companyName: "Apple",
+      // initialPrice: 149.9999,
+      // sentiment: "neutral"
   });
   return false;});
 
