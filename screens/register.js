@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {   StyleSheet, TouchableOpacity, View } from 'react-native';
+import {  ToastAndroid ,StyleSheet, TouchableOpacity, View } from 'react-native';
 import {Title,Provider, Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import { Avatar } from "react-native-elements";
+import UserService from "../services/UserService";
 
 
 export default function Register({navigation}){
@@ -16,23 +17,26 @@ export default function Register({navigation}){
     const [confirmPassword,setConfirmPassword] = React.useState('');
     
     //to put handleSubmit in onPress for Register button
-    // const handleSubmit = () => {
-    //     const newuser = {username:username,password:password,email:email};
-    //     console.log(JSON.stringify(newuser));
-    //     UserService.addUser(newuser).then(res=>(registerSuccessOrFail(res)))
-    // };
 
-    // const registerSuccessOrFail=(response)=>{
-    //     if(response.status===200){
-    //       setregister(true);
-    //       navigation.navigate("Home");
-    //     }
-    //     else{
-    //       console.log(response.status);
+
+    const handleSubmit = () => {
+        const newuser = {username:username,password:password,email:email,role:1};
+        console.log(JSON.stringify(newuser));
+        UserService.addUser(newuser).then(res=>(registerSuccessOrFail(res)))
+    };
+
+    const registerSuccessOrFail=(response)=>{
+        if(response.status===200){
+          setregistration(true);
+          ToastAndroid.show('New User Registered!', ToastAndroid.SHORT)
+          navigation.navigate('SignIn');
+        }
+        else{
+          console.log(response.status);
           
-    //     }
-    //     return;
-    //   };
+        }
+        return;
+      };
 
 
     return (
@@ -96,7 +100,7 @@ export default function Register({navigation}){
                     
                     mode="contained"
                     color="#1e3a8a"
-                    onPress={() => {register()}} 
+                    onPress={handleSubmit}  
 
                 >Register
                 </Button>  
@@ -109,7 +113,7 @@ export default function Register({navigation}){
                     color="#1e3a8a"
                     mode="text" 
                     style={{marginTop:20}}
-                    onPress={() => navigation.navigate('Sign In')}
+                    onPress={() => navigation.navigate('SignIn')}
                     >Login here</Button>
                  </TouchableOpacity>     
                 

@@ -5,6 +5,7 @@ import SignIn from './screens/signIn';
 import { AuthContext } from "./context";
 import { createStackNavigator } from '@react-navigation/stack';
 import MainTabScreen from './screens/MainTabScreen';
+import Comments from './screens/comments';
 import { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native-paper';
 import { Image, StyleSheet, View, Text } from 'react-native';
@@ -73,7 +74,7 @@ export default function App() {
                 
             />
             <Stack.Screen 
-          name="Sign In" 
+          name="SignIn" 
           component={SignIn}
           options={{headerShown: false}} />
           </Stack.Navigator>
@@ -81,7 +82,7 @@ export default function App() {
         :
         <Stack.Navigator>
         <Stack.Screen 
-          name="Sign In" 
+          name="SignIn" 
           component={SignIn}
           options={{
             
@@ -100,6 +101,12 @@ export default function App() {
           options={{
             header : CustomNavigationBar
            }} />
+        <Stack.Screen 
+      name="Comments" 
+      component={Comments}
+      options={{
+        header : CustomNavigationBar
+        }} />
         </Stack.Navigator>
           }
         </NavigationContainer>
