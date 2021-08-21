@@ -56,14 +56,14 @@ const handleSubmit = async ()  => {
                     label="Username"
                     value={username}
                     mode='outlined'
-                    onChangeText={setUsername}
+                    onChangeText={username => setUsername(username)}
                 />
 
                 <TextInput style={{marginTop:20, paddingHorizontal:10}}
                     label="Password"
                     value={password}
                     mode='outlined'
-                    onChangeText={setPassword}
+                    onChangeText={password => setPassword(password)}
                     secureTextEntry={true}
                     right={<TextInput.Icon name="eye" />}
                 />
