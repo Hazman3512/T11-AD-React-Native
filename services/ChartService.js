@@ -2,10 +2,11 @@ import axios from 'axios'
 
 // const STOCK_CANDLE_API_URL = 'http://localhost:8082/getCandleData/';
 // const STOCK_PRICE_API_URL = 'http://localhost:8082/getLatestPrice/';
-const STOCK_CANDLE_API_URL = "http://192.168.1.137:5000/getCandleData/";
-const STOCK_PRICE_API_URL = "http://192.168.1.137:5000/getLatestPrice/";
-const STOCK_SENTIMENT_API_URL = "http://192.168.1.137:5000/getSentiment/";
-const STOCK_TOP5_API_URL = "http://192.168.1.137:5000/getStockSymbol/";
+const IP = 'http://192.168.0.113:5000/';
+const STOCK_CANDLE_API_URL = IP + "getCandleData/";
+const STOCK_PRICE_API_URL = IP + "getLatestPrice/";
+const STOCK_SENTIMENT_API_URL = IP + "getSentiment/";
+const STOCK_TOP5_API_URL = IP + "getStockSymbol/";
 
 // https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=1000
 class ChartService {

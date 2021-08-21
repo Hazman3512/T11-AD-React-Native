@@ -1,8 +1,9 @@
 import axios from 'axios';
 //use IPv4 address instead of localhost
 
-const USER_API_BASE_URL="http://192.168.1.137:5000/users"
-const USER_API_LOGIN_URL="http://192.168.1.137:5000/login"
+const IP = 'http://192.168.0.113:5000/';
+const USER_API_BASE_URL= IP + "users"
+const USER_API_LOGIN_URL= IP + "login"
 
 class UserService{
     async addUser(User){

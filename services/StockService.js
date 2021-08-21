@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const STOCK_COMMENT_API_URL = "http://192.168.1.137:5000/comments/";
-const STOCK_CANDLE_SCAN_API_URL = "http://192.168.1.137:5000/candlehistory";
+const IP = 'http://192.168.0.113:5000/';
+const STOCK_COMMENT_API_URL =  IP + "comments/";
+const STOCK_CANDLE_SCAN_API_URL = IP + "candlehistory";
 
 class StockService {
   getStockComments(ticker) {

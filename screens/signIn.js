@@ -4,20 +4,23 @@ import { Title,Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import UserService from "../services/UserService";
 import { Avatar } from "react-native-elements";
+import { AsyncStorage } from 'react-native';
 
 
 export default function SignIn({ navigation }){
     
     const { signIn } = React.useContext(AuthContext);
-    const [username, setUsername] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [username, setUsername] = React.useState('zavier');
+    const [password, setPassword] = React.useState('zavier');
     const [isSuccess, setIsSuccess] = React.useState(true);
 
     //Authentication code
-    const loginSuccessOrFail=(response)=>{
+    const loginSuccessOrFail= async (response)=>{
         if(response.status == 200){
-          //SessionService.setSessionStorage('username', userName);
-          navigation.navigate('MainTabScreen', {screen: 'Search'});
+          
+        AsyncStorage.setItem('username', username);
+        //console.log(await AsyncStorage.getItem('username'));
+        navigation.navigate('MainTabScreen', {screen: 'Search'});
         }
         else{
           console.log(response.status);
