@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { Keyboard, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 import { globalStyles } from './styles/global';
-import { Searchbar, DataTable } from 'react-native-paper';
+import { Searchbar, DataTable, FAB } from 'react-native-paper';
 import { Button, Text, Card, Icon } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
 import WatchlistService from '../services/WatchlistService';
@@ -59,7 +59,16 @@ export default function Comments({ navigation, route }){
     //         .catch((error) => console.log(error))
     //         .finally(() => setLoading(false));
     //     }, []);
+
        
+    const AddCommentFAB = () => (
+        <FAB
+          style={styles.fab}
+          icon="plus"
+          color= '#1e3a8a'
+          onPress={() => console.log('Pressed')}
+        />
+      );
 
     const CommentInfo = ({ user, timestamp, content }) => (
         <View style={styles.item}>
@@ -88,8 +97,9 @@ export default function Comments({ navigation, route }){
             renderItem={renderItem}
             keyExtractor={(item, index)=> 'key'+index}
         />
+         
         : <View></View> }
-
+        <AddCommentFAB />
         </View>
         
     )
@@ -97,6 +107,13 @@ export default function Comments({ navigation, route }){
 
 
 const styles = StyleSheet.create({
+    fab: {
+        position: 'absolute',
+        margin: 24,
+        right: 0,
+        bottom: 0,
+        
+      },
     container:{
         padding: 10
     },

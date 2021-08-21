@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
-import { FlatList } from 'react-native';
+//import { FlatList } from 'react-native';
 import { ScrollView } from 'react-native';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
@@ -74,8 +74,8 @@ export default function Search({navigation, route}) {
         {stockInfo.stockTicker ? 
         [
         <View style = {styles.container}>
-          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text>{stockInfo.companyName}</Text>
+          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
           <Text></Text>
           <Text style = {styles.sentiment}>Sentiment: 
