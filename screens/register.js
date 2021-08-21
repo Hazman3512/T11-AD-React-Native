@@ -96,7 +96,7 @@ export default function Register({navigation}){
                     
                     mode="contained"
                     color="#1e3a8a"
-                    onPress={() => {register()}} 
+                    onPress={() => navigation.navigate('SignIn')} 
 
                 >Register
                 </Button>  
@@ -109,7 +109,7 @@ export default function Register({navigation}){
                     color="#1e3a8a"
                     mode="text" 
                     style={{marginTop:20}}
-                    onPress={() => navigation.navigate('Sign In')}
+                    onPress={() => navigation.navigate('SignIn')}
                     >Login here</Button>
                  </TouchableOpacity>     
                 

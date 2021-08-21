@@ -78,7 +78,7 @@ export default function App() {
                 
             />
             <Stack.Screen 
-          name="Sign In" 
+          name="SignIn" 
           component={SignIn}
           options={{headerShown: false}} />
           </Stack.Navigator>
@@ -86,7 +86,7 @@ export default function App() {
         :
         <Stack.Navigator>
         <Stack.Screen 
-          name="Sign In" 
+          name="SignIn" 
           component={SignIn}
           options={{
             

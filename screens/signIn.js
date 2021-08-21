@@ -17,7 +17,7 @@ export default function SignIn({ navigation }){
     const loginSuccessOrFail=(response)=>{
         if(response.status == 200){
           //SessionService.setSessionStorage('username', userName);
-          navigation.navigate('MainTabScreen');
+          navigation.navigate('MainTabScreen', {screen: 'Search'});
         }
         else{
           console.log(response.status);
@@ -64,7 +64,7 @@ const handleSubmit = async ()  => {
                     value={password}
                     mode='outlined'
                     onChangeText={setPassword}
-                    secureTextEntry
+                    secureTextEntry={true}
                     right={<TextInput.Icon name="eye" />}
                 />
 
