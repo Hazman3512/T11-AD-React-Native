@@ -1,7 +1,8 @@
+import { Autorenew } from '@material-ui/icons';
 import React from 'react';
 import { useState, useEffect } from 'react'
 //import { FlatList } from 'react-native';
-import { ScrollView } from 'react-native';
+import { ScrollView, ActivityIndicator } from 'react-native';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import ChartService from '../services/ChartService';
@@ -11,7 +12,7 @@ export default function Search({navigation, route}) {
 
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchTimer, setSearchTimer] = useState(null);
+  //const [searchTimer, setSearchTimer] = useState(null);
 
   const onChangeSearch = query => setSearchQuery(query);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +27,7 @@ export default function Search({navigation, route}) {
 
   async function getInitialPrice(ticker) {
 
+    setIsLoading(true);
     const req = await ChartService.getLatestClosingStockPrice(ticker);
     const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
     const latestPrice = parseFloat(req.data.close);
@@ -49,6 +51,15 @@ export default function Search({navigation, route}) {
 
   }
 
+  const handleSearch = (text) => {
+    if(text){
+      setSearchQuery(() => {
+        getInitialPrice(text);
+        return text;
+      })
+    }
+  }
+
 
     return (
       <ScrollView>
@@ -56,21 +67,12 @@ export default function Search({navigation, route}) {
         <Searchbar
         style={{borderRadius:5}}
         placeholder="Search Stocks"
-        onChangeText={(text) => {
-          if (searchTimer) {
-            clearTimeout(searchTimer);
-          }
-          setSearchQuery(text);
-          setSearchTimer(
-            setTimeout(() => {
-              getInitialPrice(text);
-            }, 2000),
-          );
-        }}
+        onChangeText={(text) =>setSearchQuery(text)}
         value={searchQuery}
-        onIconPress={()=> console.log({searchQuery})}
+        onIconPress={()=> handleSearch(searchQuery)}
         />
         </View>
+        {isLoading ? <View style={styles.loading}><ActivityIndicator size='large' color="#0000ff"/></View> : <View>
         {stockInfo.stockTicker ? 
         [
         <View style = {styles.container}>
@@ -82,8 +84,10 @@ export default function Search({navigation, route}) {
             <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
           </Text>
           </View>,
-
-          <Button
+        <View style={{height: 220, marginTop: 20}}><Button icon='graph'
+          
+          >View Chart</Button></View>,
+        <Button 
           icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
           Add to Watchlist
         </Button>,
@@ -99,16 +103,28 @@ export default function Search({navigation, route}) {
         Show Comments
         </Button>
         ]
-          : <View></View>
+          : <View style={styles.noSearchStock}><Text>There is no such stock symbol</Text></View>
           }
-
-          
+          </View>}
+       
       </ScrollView>
     );
 
 }
 
 const styles = StyleSheet.create({
+    noSearchStock: {
+      marginTop: 40, marginLeft: 'auto', marginRight: 'auto'
+    },
+    loading: {
+      flex: 1,
+      justifyContent: "center",
+      flexDirection: "row",
+      justifyContent: "space-around",
+      padding: 10,
+      marginTop: 40,
+      marginBottom: 'auto'
+    },
     container: {
         marginTop: 20,
         paddingHorizontal: 10,
