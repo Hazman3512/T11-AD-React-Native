@@ -1,26 +1,37 @@
 import React, {useState} from 'react';
-import {   StyleSheet, TouchableOpacity, View } from 'react-native';
+import {   Alert,StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Title,Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import UserService from "../services/UserService";
 import { Avatar } from "react-native-elements";
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import WatchlistService from '../services/WatchlistService';
 
 
 export default function SignIn({ navigation }){
     
     const { signIn } = React.useContext(AuthContext);
-    const [username, setUsername] = React.useState('zavier');
-    const [password, setPassword] = React.useState('zavier');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [isSuccess, setIsSuccess] = React.useState(true);
+
 
     //Authentication code
     const loginSuccessOrFail= async (response)=>{
         if(response.status == 200){
           
         AsyncStorage.setItem('username', username);
-        //console.log(await AsyncStorage.getItem('username'));
+        //store user pre-saved watchlist
+        try{
+            const watchlist = await WatchlistService.getStockWatchlist(username);
+            AsyncStorage.setItem('watchlist', JSON.stringify(watchlist.data));
+            //console.log(await AsyncStorage.getItem('watchlist'));
+       
         navigation.navigate('MainTabScreen', {screen: 'Search'});
+        }catch(error){
+            console.log(error);
+        }
+
         }
         else{
           console.log(response.status);
@@ -32,17 +43,16 @@ export default function SignIn({ navigation }){
     //     return username.length > 0 && password.length > 0;
     // }
 
-const handleSubmit = async ()  => {
+    const handleSubmit =  async()  => {
         //validateForm();
         const loginuser={username:username,password:password}
-        const req = await UserService.authenticateUser(loginuser);
+        const req =  await UserService.authenticateUser(loginuser);
         loginSuccessOrFail(req);
         
       }
     
-    return(
-        
-            <View style={styles.container}>
+      return(
+        <View style={styles.container}>
 
                 <Avatar
                 size="medium"
@@ -103,6 +113,7 @@ const handleSubmit = async ()  => {
 
 
 }
+
 
 const styles = StyleSheet.create({
     container:{
