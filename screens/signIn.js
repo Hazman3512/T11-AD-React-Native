@@ -3,6 +3,7 @@ import {   StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Title,Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import UserService from "../services/UserService";
+import WatchlistService from "../services/WatchlistService"
 import { Avatar } from "react-native-elements";
 import { AsyncStorage } from 'react-native';
 
@@ -17,10 +18,20 @@ export default function SignIn({ navigation }){
     //Authentication code
     const loginSuccessOrFail= async (response)=>{
         if(response.status == 200){
-          
+        //store username
         AsyncStorage.setItem('username', username);
         //console.log(await AsyncStorage.getItem('username'));
+        //store user pre-saved watchlist
+        try{
+        const watchlist = await WatchlistService.getStockWatchlist(username);
+        AsyncStorage.setItem('watchlist', JSON.stringify(watchlist.data));
+        //console.log(await AsyncStorage.getItem('watchlist'));
+
         navigation.navigate('MainTabScreen', {screen: 'Search'});
+        } catch (error){
+            console.log(error)
+        }
+
         }
         else{
           console.log(response.status);

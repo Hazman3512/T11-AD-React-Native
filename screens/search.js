@@ -2,10 +2,11 @@ import { Autorenew } from '@material-ui/icons';
 import React from 'react';
 import { useState, useEffect } from 'react'
 //import { FlatList } from 'react-native';
-import { ScrollView, ActivityIndicator } from 'react-native';
+import { ScrollView, ActivityIndicator, ToastAndroid } from 'react-native';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import ChartService from '../services/ChartService';
+import StorageDataService from '../services/StorageDataService';
 
 
 export default function Search({navigation, route}) {
@@ -60,6 +61,21 @@ export default function Search({navigation, route}) {
     }
   }
 
+  const handleAddWatchlist = async () => {
+    if(await StorageDataService.checkIsStockWatched(stockInfo.stockTicker)){
+      ToastAndroid.showWithGravity('Stock has already been in watchlist!', ToastAndroid.LONG, ToastAndroid.TOP);
+      console.log(await StorageDataService.getUserWatchlist());
+      }
+    else{
+      ToastAndroid.showWithGravity('Stock added to watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
+      //add to storage 
+      await StorageDataService.addStockToWatchlist(stockInfo.stockTicker, stockInfo.companyName);
+      console.log(await StorageDataService.getUserWatchlist());
+      //add to database
+
+    }
+  }
+
 
     return (
       <ScrollView>
@@ -87,7 +103,7 @@ export default function Search({navigation, route}) {
         <View style={{height: 220, marginTop: 20}}><Button icon='graph'
           
           >View Chart</Button></View>,
-        <Button 
+        <Button onPress={handleAddWatchlist}
           icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
           Add to Watchlist
         </Button>,

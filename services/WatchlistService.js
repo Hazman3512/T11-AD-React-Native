@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const IP = 'http://192.168.0.113/';
+const IP = 'http://192.168.0.113:5000/';
 const STOCK_WATCHLIST_API_URL = IP + "watchlist/";
 const CANDLE_WATCHLIST_API_URL = IP + "watchlist/candlewatchlist/";
 
