@@ -11,6 +11,18 @@ import { useEffect } from 'react';
 export default function WatchList({ navigation, route }){
 
     const [watchlist, setWatchlist] =React.useState([]);
+
+    const handleDeleteWatchlist = async () => {
+        
+       
+          ToastAndroid.showWithGravity('Stock deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
+          //add to storage 
+          await StorageDataService.deleteStockToWatchlist(stockticker);
+          console.log(await StorageDataService.getUserWatchlist());
+          //add to database
+    
+        }
+      
     
      useEffect(() => {
          async function fetchWatchlist(){
@@ -82,7 +94,7 @@ export default function WatchList({ navigation, route }){
         </View>
     );
 
-    const DeleteAlert = (data,rowMap,rowKey) =>
+    const DeleteAlert = ({handleDeleteWatchlist}) =>
     Alert.alert(
       "Delete Stock from Watchlist?",
       "*Note that your notification settings for this stock will be deleted as well!",
@@ -92,7 +104,7 @@ export default function WatchList({ navigation, route }){
           onPress:() => console.log("Cancel"),
           style: "cancel"
         },
-        { text: "Delete", onPress: () => console.log("Deleted") }
+        { text: "Delete", onPress:() => {handleDeleteWatchlist} }
       ],
       { cancelable: false }
     );
@@ -241,7 +253,7 @@ export default function WatchList({ navigation, route }){
         
         */                   
         
-     ) }        
+    )  }       
 
 
 const styles = StyleSheet.create({
