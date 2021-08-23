@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import { Text,FlatList } from 'react-native';
-import { TouchableOpacity,TouchableHighlight,ScrollView,Keyboard, StyleSheet, View, Animated } from 'react-native';
+import { TouchableOpacity,TouchableHighlight,ScrollView,Keyboard, StyleSheet, View, Alert } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { Button,Title } from 'react-native-paper';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
-import { MaterialIcons } from '@expo/vector-icons'; 
-
+import { MaterialIcons } from '@expo/vector-icons';
+import StorageDataService from '../services/StorageDataService'; 
 
 export default function WatchList({ navigation, route }){
 
-    const [listData, setListData] = useState(
-        Array(20)
-            .fill('')
-            .map((_, i) => ({ key: `${i}`, text: `item ${i}` }))
+    const userWatchlist = async() => { 
+        await StorageDataService.getUserWatchlist();
+        console.log(await StorageDataService.getUserWatchlist());
+
+        
+    }
+    
+    const [watchlist, setWatchlist] = useState(
+        
+            [userWatchlist]
+            .map((row, index) => ({ key: `${index}`, text: `Stockticker: ${row.stockticker} ` }))
     );
 
     const closeRow = (rowMap, rowKey) => {
@@ -23,10 +30,10 @@ export default function WatchList({ navigation, route }){
 
     const deleteRow = (rowMap, rowKey) => {
         closeRow(rowMap, rowKey);
-        const newData = [...listData];
-        const prevIndex = listData.findIndex(item => item.key === rowKey);
+        const newData = [...watchlist];
+        const prevIndex = watchlist.findIndex(item => item.key === rowKey);
         newData.splice(prevIndex, 1);
-        setListData(newData);
+        setWatchlist(newData);
     };
 
     const onRowDidOpen = rowKey => {
@@ -40,7 +47,7 @@ export default function WatchList({ navigation, route }){
             underlayColor={'#AAA'}
         >
             <View>
-                <Text>I am {data.item.text} in a SwipeListView</Text>
+                <Text>{data.item.text}</Text>
             </View>
         </TouchableHighlight>
     );
@@ -58,7 +65,7 @@ export default function WatchList({ navigation, route }){
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnRight]}
-                onPress={() => deleteRow(rowMap, data.item.key)}
+                onPress={DeleteAlert/*() => deleteRow(rowMap, data.item.key)*/}
             >
                 {/* <Text style={styles.backTextWhite}>Delete</Text> */}
                 <Button>
@@ -68,51 +75,24 @@ export default function WatchList({ navigation, route }){
             </TouchableOpacity>
         </View>
     );
-    
 
-    const [stockInfo, setStockInfo] = useState({
-        stockTicker: null,
-        companyName: null,
-      });
+    const DeleteAlert = (data,rowMap,rowKey) =>
+    Alert.alert(
+      "Delete Stock from Watchlist?",
+      "*Note that your notification settings for this stock will be deleted as well!",
+      [
+        {
+          text: "Cancel",
+          onPress:() => console.log("Cancel"),
+          style: "cancel"
+        },
+        { text: "Delete", onPress: () => console.log("Deleted") }
+      ],
+      { cancelable: false }
+    );
 
 
 
-    const [stocks,setStocks] = useState([
-        { id: '0', text: 'AAPL - Apple' },
-        { id: '1', text: 'GOOG - Google' },
-        {
-          id: '2',
-          text: 'MSFT-Microsoft',
-        },
-        { id: '3', text: 'AMZN-Amazon' },
-        { id: '4', text: 'FB-Facebook' },
-        { id: '5', text: 'TSLA-Tesla' },
-        {
-          id: '6',
-          text:
-            'V-Visa',
-        },
-        {
-          id: '7',
-          text:
-            'JNJ-Johnson & Johnson',
-        },
-        {
-          id: '8',
-          text:
-            'NVDA-Nvidia',
-        },
-        {
-          id: '9',
-          text:
-            'JPM - JPMorgan Chase',
-        },
-        {
-          id: '10',
-          text:
-            'BABA - Alibaba',
-        },
-      ]);
     
 
     
@@ -120,10 +100,11 @@ export default function WatchList({ navigation, route }){
     return(
         
         <View style={{backgroundColor:'white', flex:1}}>
+            <Button onPress={userWatchlist}></Button>
             <Title style={{alignSelf:'center'}}>My Watchlist</Title>
             <SwipeListView style={{marginTop:20}}
                 useFlatList={true}
-                data={listData}
+                data={watchlist}
                 renderItem={renderItem}
                 renderHiddenItem={renderHiddenItem}
                  leftOpenValue={75}
@@ -134,14 +115,12 @@ export default function WatchList({ navigation, route }){
                 onRowDidOpen={onRowDidOpen}
             />
             {/* <FlatList
-
                 data={stocks}
                 renderItem={({ item }) => (
                     
                     <Text style={styles.stock}>{item.text}</Text>
                     
                 )}
-
             /> */}
            
         </View> 
@@ -162,7 +141,6 @@ export default function WatchList({ navigation, route }){
             <DataTable.Title>Company Name</DataTable.Title>
             <DataTable.Title  numeric>Actions</DataTable.Title>
         </DataTable.Header>
-
         <DataTable.Row>
             <DataTable.Cell>1</DataTable.Cell>
             <DataTable.Cell>AAPL</DataTable.Cell>
@@ -180,7 +158,6 @@ export default function WatchList({ navigation, route }){
             </DataTable.Cell>
             
         </DataTable.Row>
-
         <DataTable.Row>
             <DataTable.Cell>2</DataTable.Cell>
             <DataTable.Cell>PLTR</DataTable.Cell>
@@ -193,7 +170,6 @@ export default function WatchList({ navigation, route }){
                             color: "#1e3a8a"
                         }} title="" type="clear"></Button>
             </TouchableOpacity>
-
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
@@ -208,7 +184,6 @@ export default function WatchList({ navigation, route }){
                             color: "#1e3a8a"
                         }} title="" type="clear"></Button>
             </TouchableOpacity>
-
             </DataTable.Cell>
         </DataTable.Row>
         <DataTable.Row>
@@ -253,11 +228,9 @@ export default function WatchList({ navigation, route }){
             </TouchableOpacity>
                 
                 
-
             </DataTable.Cell>
         </DataTable.Row>
         </DataTable>
-
         
         
         */                   
