@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {  ToastAndroid ,StyleSheet, TouchableOpacity, View } from 'react-native';
+import {  Alert, ToastAndroid ,StyleSheet, TouchableOpacity, View } from 'react-native';
 import {Title,Provider, Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import { Avatar } from "react-native-elements";
@@ -20,15 +20,24 @@ export default function Register({navigation}){
 
 
     const handleSubmit = () => {
+        validateForm();
         const newuser = {username:username,password:password,email:email,role:1};
         console.log(JSON.stringify(newuser));
         UserService.addUser(newuser).then(res=>(registerSuccessOrFail(res)))
     };
 
+    function validateForm() {
+        if (username == "" || password == "" || email=="" || confirmPassword=="" ){
+            Alert.alert("Empty Field!","All fields are required", [{text: 'OK'}]);
+            return false
+        }
+        return true
+    }
+
     const registerSuccessOrFail=(response)=>{
         if(response.status===200){
           setregistration(true);
-          ToastAndroid.show('New User Registered!', ToastAndroid.SHORT)
+          ToastAndroid.show('New User Registered! Please Login', ToastAndroid.SHORT)
           navigation.navigate('SignIn');
         }
         else{

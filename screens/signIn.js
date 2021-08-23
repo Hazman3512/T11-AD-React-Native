@@ -1,19 +1,20 @@
 import React, {useState} from 'react';
-import {   StyleSheet, TouchableOpacity, View } from 'react-native';
+import {   Alert,StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Title,Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import UserService from "../services/UserService";
 import WatchlistService from "../services/WatchlistService"
 import { Avatar } from "react-native-elements";
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function SignIn({ navigation }){
     
     const { signIn } = React.useContext(AuthContext);
-    const [username, setUsername] = React.useState('zavier');
-    const [password, setPassword] = React.useState('zavier');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [isSuccess, setIsSuccess] = React.useState(true);
+
 
     //Authentication code
     const loginSuccessOrFail= async (response)=>{
@@ -39,21 +40,25 @@ export default function SignIn({ navigation }){
         }
         return;
       };
-    // function validateForm() {
-    //     return username.length > 0 && password.length > 0;
-    // }
 
-const handleSubmit = async ()  => {
-        //validateForm();
+     function validateForm() {
+         if (username == "" || password == ""){
+             Alert.alert("Wrong Input!","Username of password field cannot be empty", [{text: 'OK'}]);
+             return false
+         }
+         return true
+     }
+
+    const handleSubmit =  async()  => {
+        validateForm();
         const loginuser={username:username,password:password}
-        const req = await UserService.authenticateUser(loginuser);
+        const req =  await UserService.authenticateUser(loginuser);
         loginSuccessOrFail(req);
         
       }
     
-    return(
-        
-            <View style={styles.container}>
+      return(
+        <View style={styles.container}>
 
                 <Avatar
                 size="medium"
@@ -114,6 +119,7 @@ const handleSubmit = async ()  => {
 
 
 }
+
 
 const styles = StyleSheet.create({
     container:{
