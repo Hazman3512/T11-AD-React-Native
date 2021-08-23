@@ -108,7 +108,7 @@ export default function Search({navigation, route}) {
           Add to Watchlist
         </Button>,
 
-        <Button
+        <Button 
         mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
         onPress={() => {
           navigation.navigate('Comments', {

@@ -3,7 +3,7 @@ import { Keyboard, StyleSheet, View, TouchableWithoutFeedback } from 'react-nati
 import { globalStyles } from './styles/global';
 import { Searchbar, DataTable, FAB } from 'react-native-paper';
 import { Button, Text, Card, Icon } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import WatchlistService from '../services/WatchlistService';
 import StockService from '../services/StockService'
 import { FlatList } from 'react-native';
@@ -12,8 +12,9 @@ export default function Comments({ navigation, route }){
 
     const { ticker } = route.params;
 
-    const [comments, setComments] = useState([null])
-    const [isLoading, setLoading] = useState(true);
+    const [comments, setComments] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     
     const dummyComments = [{user: "zavier", timestamp: "0000", content: "test 123"},
                             {user: "zavier2", timestamp: "0000", content: "2nd comment"},
@@ -27,26 +28,50 @@ export default function Comments({ navigation, route }){
                             {user: "sue", timestamp: "0000", content: "2nd comment"},
 
     ];
-    // const fetchComments = async (ticker) => {
-        
-    //     try{
-    //         const req = await StockService.getStockComments(ticker);
-    //         const commentData = req.data          
-    //         console.log(commentData)
-          
-    //         setComments(commentData.map((x) => {
-    //             return ({user: x.username, timestamp: x.commentDateTime, content: x.comment});
-    //         }))
-            
 
-    //     } catch(error){
-    //         console.log(error)
-    //     }
-    // }
+    const addComments = (newComment) => {
+        setComments([newComment, ...comments]);
+    }
 
-    // useEffect( () => {
-    //     fetchComments(ticker)
-    // })
+    useEffect(() => {
+        async function fetchComments() {
+            try{
+                setIsLoading(true);
+                const req = await StockService.getStockComments(ticker);
+                const commentData = req.data          
+                // console.log(commentData)
+                setComments(commentData.map((x) => {
+                    return ({user: x.username, timestamp: x.commentDateTime, content: x.comment});
+                }))
+                setIsLoading(false);
+            } catch (error) {
+                setIsLoading(false);
+                setError(error);
+                console.log(error)
+            }
+        }
+
+        fetchComments()
+    }, [setComments]
+    )
+
+    if (isLoading) {
+        return (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#5500dc" />
+          </View>
+        );
+      }
+    
+      if (error) {
+        return (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ fontSize: 18}}>
+              Error fetching data... Check your network connection!
+            </Text>
+          </View>
+        );
+      }
 
     // useEffect(() => {
     //     const req = StockService.getStockComments(ticker)
@@ -55,10 +80,14 @@ export default function Comments({ navigation, route }){
     //         console.log(commentData)
     //         setComments(commentData.map((x) => {
     //             return ({user: x.username, timestamp: x.commentDateTime, content: x.comment});
-    //         })) })
+    //         }))
+    //         console.log("comments: ")
+    //         console.log(comments)
+    //         console.log(comments.length)
+    //     })
     //         .catch((error) => console.log(error))
     //         .finally(() => setLoading(false));
-    //     }, []);
+    //     });
 
        
     const AddCommentFAB = () => (
@@ -66,7 +95,9 @@ export default function Comments({ navigation, route }){
           style={styles.fab}
           icon="plus"
           color= '#1e3a8a'
-          onPress={() => console.log('Pressed')}
+          onPress={
+              () => console.log('Pressed')
+            }
         />
       );
 
@@ -89,13 +120,14 @@ export default function Comments({ navigation, route }){
     
 
     return(
-        
         <View style={{backgroundColor:'white', flex:1}}>
-            {(dummyComments) ? 
+            {console.log(comments)}
+            {(comments.length !== 0) ? 
         <FlatList
-            data={dummyComments}
+            data={comments}
             renderItem={renderItem}
             keyExtractor={(item, index)=> 'key'+index}
+            extraData={comments}
         />
          
         : <View></View> }

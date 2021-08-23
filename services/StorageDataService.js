@@ -1,10 +1,13 @@
+
 import { AsyncStorage } from 'react-native';
+
+//import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 class SessionDataService{
 
      //watchlist session array of obj: [{stockticker: , stockname: , username: , }, ...]
   async getUserWatchlist() {
-       
       //return an array of js objects [{stockticker: , stockname: , username: , }, ...]
       return JSON.parse(await AsyncStorage.getItem("watchlist"));
   }
@@ -26,12 +29,11 @@ class SessionDataService{
       var watchlist = await this.getUserWatchlist();
       watchlist = [stockToAdd, ...watchlist];
       this.setUserWatchlist(watchlist);
-    
   }
 
   async deleteStockToWatchlist(ticker) {
     const user = await AsyncStorage.getItem('username');
-    
+  
       var watchlist = this.getUserWatchlist();
       if (watchlist) {
         const stockToDelete = watchlist.find((x) => x.stockticker === ticker);
@@ -39,7 +41,7 @@ class SessionDataService{
         watchlist.splice(stockIndex, 1);
         this.setUserWatchlist(watchlist);
       }
-   
+
   }
 
   async checkIsStockWatched(ticker) {
