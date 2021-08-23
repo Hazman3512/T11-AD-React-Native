@@ -39,12 +39,17 @@ export default function SignIn({ navigation }){
         }
         return;
       };
-    // function validateForm() {
-    //     return username.length > 0 && password.length > 0;
-    // }
+
+     function validateForm() {
+         if (username == "" || password == ""){
+             Alert.alert("Wrong Input!","Username of password field cannot be empty", [{text: 'OK'}]);
+             return false
+         }
+         return true
+     }
 
     const handleSubmit =  async()  => {
-        //validateForm();
+        validateForm();
         const loginuser={username:username,password:password}
         const req =  await UserService.authenticateUser(loginuser);
         loginSuccessOrFail(req);
