@@ -11,6 +11,8 @@ import { ActivityIndicator } from 'react-native-paper';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import CustomNavigationBar from './screens/layout/CustomNavigationBar';
 import Register from './screens/register';
+import {Platform} from 'react-native';
+import {initnotify, getToken} from 'expo-push-notification-helper';
 
 
 
@@ -20,6 +22,34 @@ export default function App() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [ userToken, setUserToken] = React.useState(null);
   
+  const getToken = async () => {
+   let { status } = await Expo.Permissions.askAsync(
+      Expo.Permissions.NOTIFICATIONS
+   );
+   if(status !== 'granted') { return; }
+   let token = await Expo.Notifications.getExpoPushTokenAsync();
+   console.log(token);
+   
+   fetch('https://exp.host/--/api/v2/push/send', {       
+         method: 'POST', 
+         headers: {
+               Accept: 'application/json',  
+              'Content-Type': 'application/json', 
+              'accept-encoding': 'gzip, deflate',   
+              'host': 'exp.host'      
+          }, 
+        body: JSON.stringify({                 
+              to: token,                        
+              title: 'New Notification',                  
+              body: 'The notification worked!',             
+              priority: "high",            
+              sound:"default",              
+              channelId:"default",   
+                  }),        
+      }).then((response) => response.json())   
+               .then((responseJson) => {  })
+                      .catch((error) => { console.log(error) });
+  }
   
   const authContext = React.useMemo(() => ({
 
