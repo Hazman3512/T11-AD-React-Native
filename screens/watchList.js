@@ -26,22 +26,42 @@ export default function WatchList({ navigation, route }) {
 
   const selectedStock = useState(null);
 
-  const handleDeleteWatchlist = async (stockticker) => {
-    ToastAndroid.showWithGravity(
-      stockticker + " deleted from watchlist!",
-      ToastAndroid.SHORT,
-      ToastAndroid.TOP
-    );
-    //delete from storage
-    await StorageDataService.deleteStockToWatchlist(stockticker);
-    console.log(await StorageDataService.getUserWatchlist());
-    //delete from db
-    const user = await AsyncStorage.getItem("username");
-    console.log(user);
-    await WatchlistService.deleteStockWatchlist(stockticker, user);
-    const newWatchlist = await StorageDataService.getUserWatchlist();
-    setWatchlist(newWatchlist);
-  };
+    const selectedStock = useState(null);
+
+    const handleDeleteWatchlist = async (stockticker) => {
+        
+       try {
+          ToastAndroid.showWithGravity(stockticker + ' deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
+          //delete from storage 
+          await StorageDataService.deleteStockToWatchlist(stockticker);
+          console.log(await StorageDataService.getUserWatchlist());
+          //delete from db
+            const user = await AsyncStorage.getItem("username");
+          await WatchlistService.deleteStockWatchlist(stockticker, user);
+          const newWatchlist = await StorageDataService.getUserWatchlist();
+          setWatchlist(newWatchlist);
+       }
+       catch(e){
+           console.log(e);
+
+       }
+    
+        }
+
+      useEffect(() => {
+          console.log('a');
+      })
+    
+     useEffect(() => {
+         async function fetchWatchlist(){
+             try{
+                 const req = await StorageDataService.getUserWatchlist();
+                 const watchlistData = req;
+                 console.log(watchlistData);
+                 setWatchlist(watchlistData.map((x) => {
+                     return({stockticker:x.stockticker});
+                 }))
+                }catch(error){
 
   useEffect(() => {
     async function fetchWatchlist() {
@@ -123,7 +143,7 @@ export default function WatchList({ navigation, route }) {
 
   const DeleteAlert = (ticker) =>
     Alert.alert(
-      "Delete Stock from Watchlist?",
+      "Delete " + ticker + " from Watchlist?",
       "*Note that your notification settings for this stock will be deleted as well!",
       [
         {
@@ -138,7 +158,7 @@ export default function WatchList({ navigation, route }) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Title style={{ alignSelf: "center", marginTop: 20 }}>My Watchlist</Title>
+      {/* <Title style={{ alignSelf: "center", marginTop: 20 }}>My Watchlist</Title> */}
       <SwipeListView
         style={{ marginTop: 50 }}
         useFlatList={true}
@@ -279,40 +299,43 @@ export default function WatchList({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 24,
-  },
-  backTextWhite: {
-    color: "black",
-  },
-  rowFront: {
-    alignItems: "center",
-    backgroundColor: "white",
-    borderTopColor: "black",
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-    justifyContent: "center",
-    height: 50,
-  },
-  rowBack: {
-    alignItems: "center",
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingLeft: 15,
-  },
-  backRightBtn: {
-    alignItems: "center",
-    bottom: 0,
-    justifyContent: "center",
-    position: "absolute",
-    top: 0,
-    width: 75,
-  },
-  backRightBtnLeft: {
-    right: 75,
-  },
-  backRightBtnRight: {
-    right: 0,
-  },
-});
+    container:{
+        padding: 24
+    },
+    backTextWhite: {
+        color: 'black',
+    },
+    rowFront: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderTopColor:'grey',
+        borderBottomColor: 'grey',
+        borderBottomWidth: 1,
+        justifyContent: 'center',
+        height: 50,
+    },
+    rowBack: {
+        alignItems: 'center',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+        
+    },
+    backRightBtn: {
+        alignItems: 'center',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 75,
+    },
+    backRightBtnLeft: {
+        backgroundColor:'#1e3a8a',
+        right: 75,
+    },
+    backRightBtnRight: {
+        backgroundColor:'red',
+        right: 0,
+    },
+})

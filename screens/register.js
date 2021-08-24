@@ -28,7 +28,7 @@ export default function Register({navigation}){
 
     function validateForm() {
         if (username == "" || password == "" || email=="" || confirmPassword=="" ){
-            Alert.alert("Empty Field!","All fields are required", [{text: 'OK'}]);
+            Alert.alert("Empty Field","All fields are required", [{text: 'OK'}]);
             return false
         }
         return true

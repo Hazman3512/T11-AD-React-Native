@@ -4,6 +4,7 @@ import {
   NavigationContainer,
   DefaultTheme,
   DarkTheme,
+  getFocusedRouteNameFromRoute,
 } from "@react-navigation/native";
 import SignIn from "./screens/signIn";
 import { AuthContext } from "./context";
@@ -18,9 +19,31 @@ import Register from "./screens/register";
 import Settings from "./screens/settings";
 import Stockchart from "./screens/stockchart";
 import StockChartNavigationBar from "./screens/layout/StockChartNavigationBar";
+import SettingsNavigationBar from "./screens/layout/SettingsNavigationBar";
+import CommentsNavigationBar from "./screens/layout/CommentsNavigationBar";
 import WatchList from "./screens/watchList";
 
 export default function App() {
+  function getHeaderTitle(route) {
+    // If the focused route is not found, we need to assume it's the initial screen
+    // This can happen during if there hasn't been any navigation inside the screen
+    // In our case, it's "Feed" as that's the first screen inside the navigator
+    const routeName = getFocusedRouteNameFromRoute(route);
+
+    switch (routeName) {
+      case "Search":
+        return "Search";
+      case "Watchlist":
+        return " My Watchlist";
+      case "History":
+        return "Alert History";
+      case "Comments":
+        return "Comments";
+      case "Settings":
+        return "Settings";
+    }
+  }
+
   const Stack = createStackNavigator();
   const [isLoading, setIsLoading] = React.useState(true);
   const [userToken, setUserToken] = React.useState(null);
@@ -44,7 +67,7 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 1500);
   }, []);
 
   if (isLoading) {
@@ -61,18 +84,23 @@ export default function App() {
         {userToken !== null ? (
           <Stack.Navigator
             screenOptions={{
-              header: CustomNavigationBar,
+              header: (props) => <CustomNavigationBar {...props} />,
             }}
           >
-            <Stack.Screen name="Overview" component={MainTabScreen} />
             <Stack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{ headerShown: false }}
+              name="Overview"
+              component={MainTabScreen}
+              options={({ route }) => ({
+                headerTitle: getHeaderTitle(route),
+              })}
             />
           </Stack.Navigator>
         ) : (
-          <Stack.Navigator>
+          <Stack.Navigator
+            screenOptions={{
+              header: (props) => <CustomNavigationBar {...props} />,
+            }}
+          >
             <Stack.Screen
               name="SignIn"
               component={SignIn}
@@ -90,16 +118,16 @@ export default function App() {
             <Stack.Screen
               name="MainTabScreen"
               component={MainTabScreen}
-              options={{
-                header: CustomNavigationBar,
-              }}
+              options={({ route }) => ({
+                headerTitle: getHeaderTitle(route),
+              })}
             />
             <Stack.Screen
               name="Comments"
               component={Comments}
-              options={{
-                header: CustomNavigationBar,
-              }}
+              options={({ route }) => ({
+                header: CommentsNavigationBar,
+              })}
             />
             <Stack.Screen
               name="Stockchart"
@@ -111,9 +139,9 @@ export default function App() {
             <Stack.Screen
               name="Settings"
               component={Settings}
-              options={{
-                header: CustomNavigationBar,
-              }}
+              options={({ route }) => ({
+                header: SettingsNavigationBar,
+              })}
             />
             <Stack.Screen
               name="watchList"

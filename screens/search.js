@@ -7,6 +7,7 @@ import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import ChartService from '../services/ChartService';
 import StorageDataService from '../services/StorageDataService';
+import WatchlistService from '../services/WatchlistService';
 
 
 export default function Search({navigation, route}) {
@@ -72,6 +73,9 @@ export default function Search({navigation, route}) {
       await StorageDataService.addStockToWatchlist(stockInfo.stockTicker, stockInfo.companyName);
       console.log(await StorageDataService.getUserWatchlist());
       //add to database
+      const user = await AsyncStorage.getItem("username");
+      await WatchlistService.addStockWatchlist(stockInfo.stockTicker,user);
+      console.log(await WatchlistService.getStockWatchlist());
 
     }
   }
@@ -87,6 +91,12 @@ export default function Search({navigation, route}) {
   
     
 
+  }
+
+  const handleViewChart = async () => {
+    navigation.navigate('Stockchart', {
+      ticker: stockInfo.stockTicker,
+    });
   }
 
 
@@ -106,14 +116,14 @@ export default function Search({navigation, route}) {
         [
         <View style = {styles.container} key="stockinfo">
           <Text>{stockInfo.companyName}</Text>
-          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
+          <Text style = {styles.stockTicker}>{stockInfo.stockTicker.toUpperCase()}</Text>
           <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
           <Text style = {styles.sentiment}>Sentiment: 
           {stockInfo.sentiment.toLowerCase() === "positive" ? <Text style={styles.sentimentPositive}> {stockInfo.sentiment}</Text> : (stockInfo.sentiment.toLowerCase() === "negative" ? <Text style={styles.sentimentNegative}> {stockInfo.sentiment}</Text> : <Text styles={styles.sentimentNeutral}> {stockInfo.sentiment}</Text>)}
           </Text>
           </View>,
 
-        <View style={{height: 220, marginTop: 20}} key="chart"><Button icon='graph'
+        <View style={{height: 220, marginTop: 20}} key="chart"><Button icon='graph' onPress={handleViewChart}
           >View Chart</Button></View>,
 
         <Button onPress={handleAddWatchlist} key="addToWatchlist"
