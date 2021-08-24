@@ -6,21 +6,39 @@ import { Button,Title } from 'react-native-paper';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
 import StorageDataService from '../services/StorageDataService'; 
+import { useEffect } from 'react';
 
 export default function WatchList({ navigation, route }){
 
-    const userWatchlist = async() => { 
-        await StorageDataService.getUserWatchlist();
-        console.log(await StorageDataService.getUserWatchlist());
+    const [watchlist, setWatchlist] =React.useState([]);
 
+    const handleDeleteWatchlist = async () => {
         
-    }
+       
+          ToastAndroid.showWithGravity('Stock deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
+          //add to storage 
+          await StorageDataService.deleteStockToWatchlist(stockticker);
+          console.log(await StorageDataService.getUserWatchlist());
+          //add to database
     
-    const [watchlist, setWatchlist] = useState(
-        
-            [userWatchlist]
-            .map((row, index) => ({ key: `${index}`, text: `Stockticker: ${row.stockticker} ` }))
-    );
+        }
+      
+    
+     useEffect(() => {
+         async function fetchWatchlist(){
+             try{
+                 const req = await StorageDataService.getUserWatchlist();
+                 const watchlistData = req;
+                 console.log(watchlistData);
+                 setWatchlist(watchlistData.map((x) => {
+                     return({stockticker:x.stockticker});
+                 }))
+                }catch(error){
+
+                    console.log(error);
+                }
+         }
+         fetchWatchlist()},[setWatchlist])
 
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
@@ -47,7 +65,7 @@ export default function WatchList({ navigation, route }){
             underlayColor={'#AAA'}
         >
             <View>
-                <Text>{data.item.text}</Text>
+                <Text>{data.item.stockticker}</Text>
             </View>
         </TouchableHighlight>
     );
@@ -76,7 +94,7 @@ export default function WatchList({ navigation, route }){
         </View>
     );
 
-    const DeleteAlert = (data,rowMap,rowKey) =>
+    const DeleteAlert = ({handleDeleteWatchlist}) =>
     Alert.alert(
       "Delete Stock from Watchlist?",
       "*Note that your notification settings for this stock will be deleted as well!",
@@ -86,7 +104,7 @@ export default function WatchList({ navigation, route }){
           onPress:() => console.log("Cancel"),
           style: "cancel"
         },
-        { text: "Delete", onPress: () => console.log("Deleted") }
+        { text: "Delete", onPress:() => {handleDeleteWatchlist} }
       ],
       { cancelable: false }
     );
@@ -100,12 +118,12 @@ export default function WatchList({ navigation, route }){
     return(
         
         <View style={{backgroundColor:'white', flex:1}}>
-            <Button onPress={userWatchlist}></Button>
             <Title style={{alignSelf:'center'}}>My Watchlist</Title>
             <SwipeListView style={{marginTop:20}}
                 useFlatList={true}
                 data={watchlist}
                 renderItem={renderItem}
+                keyExtractor={(item, index)=> 'key'+index}
                 renderHiddenItem={renderHiddenItem}
                  leftOpenValue={75}
                 rightOpenValue={-150}
@@ -235,7 +253,7 @@ export default function WatchList({ navigation, route }){
         
         */                   
         
-     ) }        
+    )  }       
 
 
 const styles = StyleSheet.create({
@@ -248,7 +266,7 @@ const styles = StyleSheet.create({
     rowFront: {
         alignItems: 'center',
         backgroundColor: 'white',
-        //borderTopColor:'black',
+        borderTopColor:'black',
         //borderBottomColor: 'black',
         borderBottomWidth: 1,
         justifyContent: 'center',
