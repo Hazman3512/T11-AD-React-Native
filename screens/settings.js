@@ -6,6 +6,7 @@ import {
   Switch,
   ScrollView,
   Image,
+  ToastAndroid,
 } from "react-native";
 import {
   Button,
@@ -111,7 +112,12 @@ export default function Settings({ navigation, route }) {
   };
 
   const navigateback = () => {
-    navigation.navigate("watchList");
+    navigation.navigate("WatchList");
+    ToastAndroid.showWithGravity(
+      ticker + " candle saved!",
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP
+    );
   };
 
   const loadStockSetting = async () => {
@@ -184,7 +190,7 @@ export default function Settings({ navigation, route }) {
           color="#1e3a8a"
           mode="contained"
           icon="cancel"
-          onPress={() => navigation.navigate("watchList")}
+          onPress={() => navigation.navigate("WatchList")}
         >
           Cancel
         </Button>

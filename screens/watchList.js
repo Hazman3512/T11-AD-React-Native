@@ -23,45 +23,31 @@ export default function WatchList({ navigation, route }) {
   const isFocused = useIsFocused();
   const [watchlist, setWatchlist] = React.useState([]);
   const [user, setuser] = useState("");
-
   const selectedStock = useState(null);
 
-    const selectedStock = useState(null);
+  const handleDeleteWatchlist = async (stockticker) => {
+    try {
+      ToastAndroid.showWithGravity(
+        stockticker + " deleted from watchlist!",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP
+      );
+      //delete from storage
+      await StorageDataService.deleteStockToWatchlist(stockticker);
+      console.log(await StorageDataService.getUserWatchlist());
+      //delete from db
+      const user = await AsyncStorage.getItem("username");
+      await WatchlistService.deleteStockWatchlist(stockticker, user);
+      const newWatchlist = await StorageDataService.getUserWatchlist();
+      setWatchlist(newWatchlist);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-    const handleDeleteWatchlist = async (stockticker) => {
-        
-       try {
-          ToastAndroid.showWithGravity(stockticker + ' deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
-          //delete from storage 
-          await StorageDataService.deleteStockToWatchlist(stockticker);
-          console.log(await StorageDataService.getUserWatchlist());
-          //delete from db
-            const user = await AsyncStorage.getItem("username");
-          await WatchlistService.deleteStockWatchlist(stockticker, user);
-          const newWatchlist = await StorageDataService.getUserWatchlist();
-          setWatchlist(newWatchlist);
-       }
-       catch(e){
-           console.log(e);
-
-       }
-    
-        }
-
-      useEffect(() => {
-          console.log('a');
-      })
-    
-     useEffect(() => {
-         async function fetchWatchlist(){
-             try{
-                 const req = await StorageDataService.getUserWatchlist();
-                 const watchlistData = req;
-                 console.log(watchlistData);
-                 setWatchlist(watchlistData.map((x) => {
-                     return({stockticker:x.stockticker});
-                 }))
-                }catch(error){
+  useEffect(() => {
+    console.log("a");
+  });
 
   useEffect(() => {
     async function fetchWatchlist() {
@@ -69,7 +55,8 @@ export default function WatchList({ navigation, route }) {
         const req = await StorageDataService.getUserWatchlist();
         const watchlistData = req;
         console.log(watchlistData);
-        setuser(await AsyncStorage.getItem("username"));
+        const user = await AsyncStorage.getItem("username");
+        setuser(user);
         console.log(user);
         setWatchlist(
           watchlistData.map((x) => {
@@ -109,7 +96,7 @@ export default function WatchList({ navigation, route }) {
       underlayColor={"#AAA"}
     >
       <View>
-        <Text>{data.item.stockticker}</Text>
+        <Text>{data.item.stockticker.toUpperCase()}</Text>
       </View>
     </TouchableHighlight>
   );
@@ -126,7 +113,7 @@ export default function WatchList({ navigation, route }) {
         }
       >
         <Button>
-          <MaterialIcons name="settings" size={24} color="#1e3a8a" />
+          <MaterialIcons name="settings" size={24} color="white" />
         </Button>
       </TouchableOpacity>
       <TouchableOpacity
@@ -135,7 +122,7 @@ export default function WatchList({ navigation, route }) {
       >
         {/* <Text style={styles.backTextWhite}>Delete</Text> */}
         <Button>
-          <MaterialIcons name="delete" size={24} color="#1e3a8a" />
+          <MaterialIcons name="delete" size={24} color="white" />
         </Button>
       </TouchableOpacity>
     </View>
@@ -158,9 +145,9 @@ export default function WatchList({ navigation, route }) {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* <Title style={{ alignSelf: "center", marginTop: 20 }}>My Watchlist</Title> */}
+      {/* <Title style={{alignSelf:'center', marginTop:20}}>My Watchlist</Title> */}
       <SwipeListView
-        style={{ marginTop: 50 }}
+        style={{ marginTop: 20 }}
         useFlatList={true}
         data={watchlist}
         renderItem={renderItem}
@@ -299,43 +286,42 @@ export default function WatchList({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-    container:{
-        padding: 24
-    },
-    backTextWhite: {
-        color: 'black',
-    },
-    rowFront: {
-        alignItems: 'center',
-        backgroundColor: 'white',
-        borderTopColor:'grey',
-        borderBottomColor: 'grey',
-        borderBottomWidth: 1,
-        justifyContent: 'center',
-        height: 50,
-    },
-    rowBack: {
-        alignItems: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingLeft: 15,
-        
-    },
-    backRightBtn: {
-        alignItems: 'center',
-        bottom: 0,
-        justifyContent: 'center',
-        position: 'absolute',
-        top: 0,
-        width: 75,
-    },
-    backRightBtnLeft: {
-        backgroundColor:'#1e3a8a',
-        right: 75,
-    },
-    backRightBtnRight: {
-        backgroundColor:'red',
-        right: 0,
-    },
-})
+  container: {
+    padding: 24,
+  },
+  backTextWhite: {
+    color: "black",
+  },
+  rowFront: {
+    alignItems: "center",
+    backgroundColor: "white",
+    borderTopColor: "grey",
+    borderBottomColor: "grey",
+    borderBottomWidth: 1,
+    justifyContent: "center",
+    height: 50,
+  },
+  rowBack: {
+    alignItems: "center",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: "center",
+    bottom: 0,
+    justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    width: 75,
+  },
+  backRightBtnLeft: {
+    backgroundColor: "#1e3a8a",
+    right: 75,
+  },
+  backRightBtnRight: {
+    backgroundColor: "red",
+    right: 0,
+  },
+});

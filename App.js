@@ -94,6 +94,11 @@ export default function App() {
                 headerTitle: getHeaderTitle(route),
               })}
             />
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         ) : (
           <Stack.Navigator
@@ -144,7 +149,7 @@ export default function App() {
               })}
             />
             <Stack.Screen
-              name="watchList"
+              name="Watchlist"
               component={WatchList}
               options={{
                 header: CustomNavigationBar,
