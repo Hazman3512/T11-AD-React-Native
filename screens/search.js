@@ -2,7 +2,7 @@ import { Autorenew } from '@material-ui/icons';
 import React from 'react';
 import { useState, useEffect } from 'react'
 //import { FlatList } from 'react-native';
-import { ScrollView, ActivityIndicator, ToastAndroid } from 'react-native';
+import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage } from 'react-native';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import ChartService from '../services/ChartService';
@@ -76,6 +76,19 @@ export default function Search({navigation, route}) {
     }
   }
 
+  const handleShowComment = async() => {
+  
+    const user = await AsyncStorage.getItem('username');
+
+    navigation.navigate('Comments', {
+    ticker: stockInfo.stockTicker,
+    user: user,
+    });
+  
+    
+
+  }
+
 
     return (
       <ScrollView>
@@ -111,12 +124,7 @@ export default function Search({navigation, route}) {
 
         <Button key="Comments"
         mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
-        onPress={() => {
-          navigation.navigate('Comments', {
-          ticker: stockInfo.stockTicker,
-          user: "zavier", //to change this according to login session
-        });
-      }}
+        onPress={handleShowComment}
         >
         Show Comments
         </Button>
