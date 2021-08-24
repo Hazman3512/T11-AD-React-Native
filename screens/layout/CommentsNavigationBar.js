@@ -1,11 +1,10 @@
-import React from "react";
-import { Appbar } from "react-native-paper";
-import { AuthContext } from "../../context";
-import SignIn from "../signIn";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import React from 'react';
+import { Appbar } from 'react-native-paper';
+import { AuthContext } from '../../context';
+import SignIn from '../signIn';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 function CommentsNavigationBar({ navigation, route, previous }) {
   const routeName = getFocusedRouteNameFromRoute(route);
@@ -15,7 +14,6 @@ function CommentsNavigationBar({ navigation, route, previous }) {
   const handleLogout = async () => {
     try {
       //console.log(AsyncStorage.getItem('username'));
-
       AsyncStorage.clear();
       //console.log(await AsyncStorage.getItem('username'));
       navigation.navigate("SignIn");
