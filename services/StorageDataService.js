@@ -24,7 +24,7 @@ class SessionDataService{
         username: user,
       };
       var watchlist = await this.getUserWatchlist();
-      watchlist = [stockToAdd, ...watchlist];
+      watchlist = [...watchlist,stockToAdd];
       this.setUserWatchlist(watchlist);
 
   }
