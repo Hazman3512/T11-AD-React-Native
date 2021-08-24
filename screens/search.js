@@ -2,7 +2,7 @@ import { Autorenew } from '@material-ui/icons';
 import React from 'react';
 import { useState, useEffect } from 'react'
 //import { FlatList } from 'react-native';
-import { ScrollView, ActivityIndicator, ToastAndroid } from 'react-native';
+import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage } from 'react-native';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
 import ChartService from '../services/ChartService';
@@ -29,24 +29,24 @@ export default function Search({navigation, route}) {
   async function getInitialPrice(ticker) {
 
     setIsLoading(true);
-    // const req = await ChartService.getLatestClosingStockPrice(ticker);
-    // const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
-    // const latestPrice = parseFloat(req.data.close);
-    // const company = req.data.description;
-    // const sentimentData = sentimentReq.data;
+    const req = await ChartService.getLatestClosingStockPrice(ticker);
+    const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
+    const latestPrice = parseFloat(req.data.close);
+    const company = req.data.description;
+    const sentimentData = sentimentReq.data;
 
     setIsLoading(() => {
       setStockInfo({
-      // stockTicker: ticker,
-      // companyName: company,
-      // initialPrice: latestPrice,
-      // sentiment: sentimentData
+      stockTicker: ticker,
+      companyName: company,
+      initialPrice: latestPrice,
+      sentiment: sentimentData
 
       // Comment out the following if calling from API
-      stockTicker: "AAPL",
-      companyName: "Apple",
-      initialPrice: 149.9999,
-      sentiment: "neutral"
+      // stockTicker: "AAPL",
+      // companyName: "Apple",
+      // initialPrice: 149.9999,
+      // sentiment: "negative"
   });
   return false;});
 
@@ -76,6 +76,19 @@ export default function Search({navigation, route}) {
     }
   }
 
+  const handleShowComment = async() => {
+  
+    const user = await AsyncStorage.getItem('username');
+
+    navigation.navigate('Comments', {
+    ticker: stockInfo.stockTicker,
+    user: user,
+    });
+  
+    
+
+  }
+
 
     return (
       <ScrollView>
@@ -95,9 +108,8 @@ export default function Search({navigation, route}) {
           <Text>{stockInfo.companyName}</Text>
           <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
-          <Text></Text>
           <Text style = {styles.sentiment}>Sentiment: 
-            <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
+          {stockInfo.sentiment.toLowerCase() === "positive" ? <Text style={styles.sentimentPositive}> {stockInfo.sentiment}</Text> : (stockInfo.sentiment.toLowerCase() === "negative" ? <Text style={styles.sentimentNegative}> {stockInfo.sentiment}</Text> : <Text styles={styles.sentimentNeutral}> {stockInfo.sentiment}</Text>)}
           </Text>
           </View>,
 
@@ -111,12 +123,7 @@ export default function Search({navigation, route}) {
 
         <Button key="Comments"
         mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
-        onPress={() => {
-          navigation.navigate('Comments', {
-          ticker: stockInfo.stockTicker,
-          user: "zavier", //to change this according to login session
-        });
-      }}
+        onPress={handleShowComment}
         >
         Show Comments
         </Button>
@@ -159,16 +166,16 @@ const styles = StyleSheet.create({
     sentiment: {
       fontSize: 20
     },
-    sentimentInner: {
-      textTransform: 'uppercase'
-    },
     sentimentPositive: {
+      textTransform: 'uppercase',
       color: "green"
     },
     sentimentNeutral: {
+      textTransform: 'uppercase',
       color: "gray"
     },
     sentimentNegative: {
+      textTransform: 'uppercase',
       color: "red"
     },
     Btn: {
