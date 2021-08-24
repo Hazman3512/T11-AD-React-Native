@@ -13,6 +13,8 @@ import CustomNavigationBar from './screens/layout/CustomNavigationBar';
 import Register from './screens/register';
 import DeletePopup from './Modal/DeletePopup';
 import Settings from './screens/settings';
+import Stockchart from './screens/stockchart';
+import StockChartNavigationBar from './screens/layout/StockChartNavigationBar';
 
 export default function App() {
 
@@ -106,6 +108,12 @@ export default function App() {
           component={Comments}
           options={{
         header : CustomNavigationBar
+        }} />
+        <Stack.Screen 
+        name="Stockchart" 
+        component={Stockchart}
+        options={{
+        header : StockChartNavigationBar
         }} />
         <Stack.Screen 
           name="Settings" 

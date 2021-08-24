@@ -21,7 +21,10 @@ export default function WatchList({ navigation, route }){
           console.log(await StorageDataService.getUserWatchlist());
     
         }
-      
+
+      useEffect(() => {
+          console.log('a');
+      })
     
      useEffect(() => {
          async function fetchWatchlist(){
@@ -38,7 +41,7 @@ export default function WatchList({ navigation, route }){
                     console.log(error);
                 }
          }
-         fetchWatchlist()},[setWatchlist])
+         fetchWatchlist()},[])
 
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
@@ -118,7 +121,7 @@ export default function WatchList({ navigation, route }){
         
         <View style={{ flex:1}}>
             <Title style={{alignSelf:'center', marginTop:20}}>My Watchlist</Title>
-            <SwipeListView style={{marginTop:40}}
+            <SwipeListView style={{marginTop:50}}
                 useFlatList={true}
                 data={watchlist}
                 renderItem={renderItem}
