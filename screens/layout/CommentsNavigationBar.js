@@ -7,32 +7,32 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 function CommentsNavigationBar({ navigation, route, previous }) {
+  const routeName = getFocusedRouteNameFromRoute(route);
+  const { signOut } = React.useContext(AuthContext);
+  //const navigation = useNavigation();
 
-    const routeName = getFocusedRouteNameFromRoute(route);
-    const { signOut } = React.useContext(AuthContext);
-    //const navigation = useNavigation();
-    
-    const handleLogout = async () => {
-      try{
+  const handleLogout = async () => {
+    try {
       //console.log(AsyncStorage.getItem('username'));
-        
       AsyncStorage.clear();
       //console.log(await AsyncStorage.getItem('username'));
-      navigation.navigate('SignIn');
-      }catch(e){
-        console.log('Error Page');
-      }
+      navigation.navigate("SignIn");
+    } catch (e) {
+      console.log("Error Page");
     }
+  };
 
-    return (
-      <Appbar.Header style={{
-          backgroundColor: "white"}}> 
-        {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-        <Appbar.Content title="Comments"></Appbar.Content>
-        <Appbar.Action icon="logout" onPress={handleLogout} />
-      </Appbar.Header>
-    );
-  }
-
+  return (
+    <Appbar.Header
+      style={{
+        backgroundColor: "white",
+      }}
+    >
+      {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      <Appbar.Content title="Comments"></Appbar.Content>
+      <Appbar.Action icon="logout" onPress={handleLogout} />
+    </Appbar.Header>
+  );
+}
 
 export default CommentsNavigationBar;
