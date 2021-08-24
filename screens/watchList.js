@@ -6,21 +6,30 @@ import { Button,Title } from 'react-native-paper';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons';
 import StorageDataService from '../services/StorageDataService'; 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useIsFocused } from '@react-navigation/native';
+import WatchlistService from '../services/WatchlistService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WatchList({ navigation, route }){
 
     const isFocused = useIsFocused();
     const [watchlist, setWatchlist] =React.useState([]);
 
-    const handleDeleteWatchlist = async () => {
+    const selectedStock = useState(null);
+
+    const handleDeleteWatchlist = async (stockticker) => {
         
        
-          ToastAndroid.showWithGravity('Stock deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
+          ToastAndroid.showWithGravity(stockticker + ' deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
           //delete from storage 
           await StorageDataService.deleteStockToWatchlist(stockticker);
           console.log(await StorageDataService.getUserWatchlist());
+          //delete from db
+            const user = await AsyncStorage.getItem("username");
+          await WatchlistService.deleteStockWatchlist(stockticker, user);
+          const newWatchlist = await StorageDataService.getUserWatchlist();
+          setWatchlist(newWatchlist);
     
         }
 
@@ -63,7 +72,7 @@ export default function WatchList({ navigation, route }){
     };
 
     const renderItem = data => (
-        <TouchableHighlight
+        <TouchableHighlight key={data.item.stockticker}
             onPress={() => console.log("You pressed me")}
             style={styles.rowFront}
             underlayColor={'#AAA'}
@@ -74,7 +83,7 @@ export default function WatchList({ navigation, route }){
         </TouchableHighlight>
     );
 
-    const renderHiddenItem = () => (
+    const renderHiddenItem = (data) => (
         <View style={styles.rowBack}>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnLeft]}
@@ -86,7 +95,7 @@ export default function WatchList({ navigation, route }){
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.backRightBtn, styles.backRightBtnRight]}
-                onPress={DeleteAlert/*() => deleteRow(rowMap, data.item.key)*/}
+                onPress={() => DeleteAlert(data.item.stockticker)}
             >
                 {/* <Text style={styles.backTextWhite}>Delete</Text> */}
                 <Button>
@@ -97,7 +106,7 @@ export default function WatchList({ navigation, route }){
         </View>
     );
 
-    const DeleteAlert = ({handleDeleteWatchlist}) =>
+    const DeleteAlert = (ticker) =>
     Alert.alert(
       "Delete Stock from Watchlist?",
       "*Note that your notification settings for this stock will be deleted as well!",
@@ -107,7 +116,7 @@ export default function WatchList({ navigation, route }){
           onPress:() => console.log("Cancel"),
           style: "cancel"
         },
-        { text: "Delete", onPress:() => {handleDeleteWatchlist} }
+        { text: "Delete", onPress:() => handleDeleteWatchlist(ticker) }
       ],
       { cancelable: false }
     );

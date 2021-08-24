@@ -32,7 +32,7 @@ class SessionDataService{
   async deleteStockToWatchlist(ticker) {
     const user = await AsyncStorage.getItem('username');
 
-      var watchlist = this.getUserWatchlist();
+      var watchlist = await this.getUserWatchlist();
       if (watchlist) {
         const stockToDelete = watchlist.find((x) => x.stockticker === ticker);
         var stockIndex = watchlist.indexOf(stockToDelete);
