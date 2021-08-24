@@ -29,24 +29,24 @@ export default function Search({navigation, route}) {
   async function getInitialPrice(ticker) {
 
     setIsLoading(true);
-    // const req = await ChartService.getLatestClosingStockPrice(ticker);
-    // const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
-    // const latestPrice = parseFloat(req.data.close);
-    // const company = req.data.description;
-    // const sentimentData = sentimentReq.data;
+    const req = await ChartService.getLatestClosingStockPrice(ticker);
+    const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
+    const latestPrice = parseFloat(req.data.close);
+    const company = req.data.description;
+    const sentimentData = sentimentReq.data;
 
     setIsLoading(() => {
       setStockInfo({
-      // stockTicker: ticker,
-      // companyName: company,
-      // initialPrice: latestPrice,
-      // sentiment: sentimentData
+      stockTicker: ticker,
+      companyName: company,
+      initialPrice: latestPrice,
+      sentiment: sentimentData
 
       // Comment out the following if calling from API
-      stockTicker: "AAPL",
-      companyName: "Apple",
-      initialPrice: 149.9999,
-      sentiment: "neutral"
+      // stockTicker: "AAPL",
+      // companyName: "Apple",
+      // initialPrice: 149.9999,
+      // sentiment: "negative"
   });
   return false;});
 
@@ -108,9 +108,8 @@ export default function Search({navigation, route}) {
           <Text>{stockInfo.companyName}</Text>
           <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
-          <Text></Text>
           <Text style = {styles.sentiment}>Sentiment: 
-            <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
+          {stockInfo.sentiment.toLowerCase() === "positive" ? <Text style={styles.sentimentPositive}> {stockInfo.sentiment}</Text> : (stockInfo.sentiment.toLowerCase() === "negative" ? <Text style={styles.sentimentNegative}> {stockInfo.sentiment}</Text> : <Text styles={styles.sentimentNeutral}> {stockInfo.sentiment}</Text>)}
           </Text>
           </View>,
 
@@ -167,16 +166,16 @@ const styles = StyleSheet.create({
     sentiment: {
       fontSize: 20
     },
-    sentimentInner: {
-      textTransform: 'uppercase'
-    },
     sentimentPositive: {
+      textTransform: 'uppercase',
       color: "green"
     },
     sentimentNeutral: {
+      textTransform: 'uppercase',
       color: "gray"
     },
     sentimentNegative: {
+      textTransform: 'uppercase',
       color: "red"
     },
     Btn: {
