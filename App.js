@@ -11,8 +11,10 @@ import { ActivityIndicator } from 'react-native-paper';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import CustomNavigationBar from './screens/layout/CustomNavigationBar';
 import Register from './screens/register';
-
-
+import DeletePopup from './Modal/DeletePopup';
+import Settings from './screens/settings';
+import Stockchart from './screens/stockchart';
+import StockChartNavigationBar from './screens/layout/StockChartNavigationBar';
 
 export default function App() {
 
@@ -102,9 +104,21 @@ export default function App() {
             header : CustomNavigationBar
            }} />
         <Stack.Screen 
-      name="Comments" 
-      component={Comments}
-      options={{
+          name="Comments" 
+          component={Comments}
+          options={{
+        header : CustomNavigationBar
+        }} />
+        <Stack.Screen 
+        name="Stockchart" 
+        component={Stockchart}
+        options={{
+        header : StockChartNavigationBar
+        }} />
+        <Stack.Screen 
+          name="Settings" 
+          component={Settings}
+          options={{
         header : CustomNavigationBar
         }} />
         </Stack.Navigator>

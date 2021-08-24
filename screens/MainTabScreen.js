@@ -7,6 +7,7 @@ import CustomNavigationBar from './layout/CustomNavigationBar';
 import Search from './search';
 import WatchList from './watchList';
 import History from './history';
+import StorageDataService from '../services/StorageDataService';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -41,7 +42,8 @@ export default function MainTabScreen ({ navigation }) {
                 options={{
                 tabBarLabel: 'Watchlist',
                 tabBarIcon: ({ color }) => (
-                    <MaterialCommunityIcons name="view-list" color={color} size={26} />
+                    <MaterialCommunityIcons onPress={async ()=>navigation.navigate('Watchlist', await StorageDataService.getUserWatchlist())} 
+                    name="view-list" color={color} size={26} />
                 ),
                 }}
             />

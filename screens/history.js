@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {TouchableOpacity, StyleSheet, View } from "react-native";
 import {Button,Subheading,Text, Card, Title, Paragraph } from "react-native-paper";
 import { Picker as SelectPicker} from '@react-native-picker/picker';
+import { ScrollView } from "react-native";
 
 
 
@@ -25,11 +26,29 @@ export default function History({ navigation }){
             <SelectPicker.Item label="AAPL" value="apple" />
             <SelectPicker.Item label="GOOG" value="bynd" />
           </SelectPicker>
+          <ScrollView>
+          <Card style={{marginTop:20, marginHorizontal:10}}>
+            
+              <Card.Content>
+                <Title>AAPL</Title>
+                <Paragraph>Bullish Engulfing Pattern has appeared</Paragraph>
+              </Card.Content>
+            
+          </Card>
 
+          <Card style={{marginTop:20, marginHorizontal:10}}>
+            
+              <Card.Content>
+                <Title>AAPL</Title>
+                <Paragraph>Bullish Engulfing Pattern has appeared</Paragraph>
+              </Card.Content>
+            
+          </Card>
+          </ScrollView> 
 
           
           <Button
-            style={{marginTop:440,marginHorizontal:70}} 
+            style={{marginTop:120,marginHorizontal:70,marginBottom:10}} 
             color="#1e3a8a" 
             icon="chart-bar" 
             mode="contained" 
@@ -48,7 +67,6 @@ export default function History({ navigation }){
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor:'white',
       flex:1,
       
       
