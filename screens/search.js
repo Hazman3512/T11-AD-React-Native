@@ -29,24 +29,24 @@ export default function Search({navigation, route}) {
   async function getInitialPrice(ticker) {
 
     setIsLoading(true);
-    const req = await ChartService.getLatestClosingStockPrice(ticker);
-    const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
-    const latestPrice = parseFloat(req.data.close);
-    const company = req.data.description;
-    const sentimentData = sentimentReq.data;
+    // const req = await ChartService.getLatestClosingStockPrice(ticker);
+    // const sentimentReq = await ChartService.getLatestStockSentiment(ticker);
+    // const latestPrice = parseFloat(req.data.close);
+    // const company = req.data.description;
+    // const sentimentData = sentimentReq.data;
 
     setIsLoading(() => {
       setStockInfo({
-      stockTicker: ticker,
-      companyName: company,
-      initialPrice: latestPrice,
-      sentiment: sentimentData
+      // stockTicker: ticker,
+      // companyName: company,
+      // initialPrice: latestPrice,
+      // sentiment: sentimentData
 
-      //Comment out the following if calling from API
-      // stockTicker: "AAPL",
-      // companyName: "Apple",
-      // initialPrice: 149.9999,
-      // sentiment: "neutral"
+      // Comment out the following if calling from API
+      stockTicker: "AAPL",
+      companyName: "Apple",
+      initialPrice: 149.9999,
+      sentiment: "neutral"
   });
   return false;});
 
@@ -91,7 +91,7 @@ export default function Search({navigation, route}) {
         {isLoading ? <View style={styles.loading}><ActivityIndicator size='large' color="#0000ff"/></View> : <View>
         {stockInfo.stockTicker ? 
         [
-        <View style = {styles.container}>
+        <View style = {styles.container} key="stockinfo">
           <Text>{stockInfo.companyName}</Text>
           <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
           <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
@@ -100,19 +100,21 @@ export default function Search({navigation, route}) {
             <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
           </Text>
           </View>,
-        <View style={{height: 220, marginTop: 20}}><Button icon='graph'
-          
+
+        <View style={{height: 220, marginTop: 20}} key="chart"><Button icon='graph'
           >View Chart</Button></View>,
-        <Button onPress={handleAddWatchlist}
+
+        <Button onPress={handleAddWatchlist} key="addToWatchlist"
           icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
           Add to Watchlist
         </Button>,
 
-        <Button 
+        <Button key="Comments"
         mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
         onPress={() => {
           navigation.navigate('Comments', {
           ticker: stockInfo.stockTicker,
+          user: "zavier", //to change this according to login session
         });
       }}
         >
