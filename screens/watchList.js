@@ -7,9 +7,11 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import StorageDataService from '../services/StorageDataService'; 
 import { useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function WatchList({ navigation, route }){
 
+    const isFocused = useIsFocused();
     const [watchlist, setWatchlist] =React.useState([]);
 
     const handleDeleteWatchlist = async () => {
@@ -29,7 +31,6 @@ export default function WatchList({ navigation, route }){
      useEffect(() => {
          async function fetchWatchlist(){
              try{
-                ToastAndroid.showWithGravity('Swipe left to reveal more icons', ToastAndroid.LONG,ToastAndroid.BOTTOM)
                  const req = await StorageDataService.getUserWatchlist();
                  const watchlistData = req;
                  console.log(watchlistData);
@@ -41,7 +42,7 @@ export default function WatchList({ navigation, route }){
                     console.log(error);
                 }
          }
-         fetchWatchlist()},[])
+         fetchWatchlist()},[isFocused])
 
     const closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
