@@ -20,7 +20,7 @@ export default function WatchList({ navigation, route }){
 
     const handleDeleteWatchlist = async (stockticker) => {
         
-       
+       try {
           ToastAndroid.showWithGravity(stockticker + ' deleted from watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
           //delete from storage 
           await StorageDataService.deleteStockToWatchlist(stockticker);
@@ -30,6 +30,11 @@ export default function WatchList({ navigation, route }){
           await WatchlistService.deleteStockWatchlist(stockticker, user);
           const newWatchlist = await StorageDataService.getUserWatchlist();
           setWatchlist(newWatchlist);
+       }
+       catch(e){
+           console.log(e);
+
+       }
     
         }
 
@@ -90,7 +95,7 @@ export default function WatchList({ navigation, route }){
                 onPress={() => navigation.navigate('Settings')}
             >
                 <Button>
-                    <MaterialIcons name="settings" size={24} color="#1e3a8a" />
+                    <MaterialIcons name="settings" size={24} color="white" />
                 </Button>
             </TouchableOpacity>
             <TouchableOpacity
@@ -99,7 +104,7 @@ export default function WatchList({ navigation, route }){
             >
                 {/* <Text style={styles.backTextWhite}>Delete</Text> */}
                 <Button>
-                <MaterialIcons name="delete" size={24} color="#1e3a8a" />
+                <MaterialIcons name="delete" size={24} color="white" />
                 
                 </Button>
             </TouchableOpacity>
@@ -108,7 +113,7 @@ export default function WatchList({ navigation, route }){
 
     const DeleteAlert = (ticker) =>
     Alert.alert(
-      "Delete Stock from Watchlist?",
+      "Delete " + ticker + " from Watchlist?",
       "*Note that your notification settings for this stock will be deleted as well!",
       [
         {
@@ -130,8 +135,8 @@ export default function WatchList({ navigation, route }){
     return(
         
         <View style={{ flex:1}}>
-            <Title style={{alignSelf:'center', marginTop:20}}>My Watchlist</Title>
-            <SwipeListView style={{marginTop:50}}
+            {/* <Title style={{alignSelf:'center', marginTop:20}}>My Watchlist</Title> */}
+            <SwipeListView style={{marginTop:20}}
                 useFlatList={true}
                 data={watchlist}
                 renderItem={renderItem}
@@ -282,8 +287,8 @@ const styles = StyleSheet.create({
     rowFront: {
         alignItems: 'center',
         backgroundColor: 'white',
-        borderTopColor:'black',
-        borderBottomColor: 'black',
+        borderTopColor:'grey',
+        borderBottomColor: 'grey',
         borderBottomWidth: 1,
         justifyContent: 'center',
         height: 50,
@@ -294,6 +299,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingLeft: 15,
+        
     },
     backRightBtn: {
         alignItems: 'center',
@@ -304,9 +310,11 @@ const styles = StyleSheet.create({
         width: 75,
     },
     backRightBtnLeft: {
+        backgroundColor:'#1e3a8a',
         right: 75,
     },
     backRightBtnRight: {
+        backgroundColor:'red',
         right: 0,
     },
 })

@@ -5,7 +5,7 @@ import { Picker as SelectPicker} from '@react-native-picker/picker';
 
 
 
-export default function Settings({ navigation }){
+export default function Settings({ navigation, route }){
 
   
 

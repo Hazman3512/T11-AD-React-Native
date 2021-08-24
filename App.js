@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme,getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import SignIn from './screens/signIn';
 import { AuthContext } from "./context";
 import { createStackNavigator } from '@react-navigation/stack';
@@ -11,12 +11,34 @@ import { ActivityIndicator } from 'react-native-paper';
 import { Image, StyleSheet, View, Text } from 'react-native';
 import CustomNavigationBar from './screens/layout/CustomNavigationBar';
 import Register from './screens/register';
-import DeletePopup from './Modal/DeletePopup';
 import Settings from './screens/settings';
 import Stockchart from './screens/stockchart';
 import StockChartNavigationBar from './screens/layout/StockChartNavigationBar';
+import SettingsNavigationBar from './screens/layout/SettingsNavigationBar';
+import CommentsNavigationBar from './screens/layout/CommentsNavigationBar';
+
 
 export default function App() {
+
+  function getHeaderTitle(route) {
+    // If the focused route is not found, we need to assume it's the initial screen
+    // This can happen during if there hasn't been any navigation inside the screen
+    // In our case, it's "Feed" as that's the first screen inside the navigator
+    const routeName = getFocusedRouteNameFromRoute(route);
+  
+    switch (routeName) {
+      case 'Search':
+        return 'Search';
+      case 'Watchlist':
+        return ' My Watchlist';
+      case 'History':
+        return 'Alert History';
+      case 'Comments':
+        return 'Comments';
+      case 'Settings':
+        return 'Settings';
+    }
+  }
 
   const Stack = createStackNavigator();
   const [isLoading, setIsLoading] = React.useState(true);
@@ -43,7 +65,7 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsLoading(false);
-    },1000);
+    },1500);
   }, []);
 
   if ( isLoading ){
@@ -66,12 +88,16 @@ export default function App() {
           { userToken !== null ? (
           <Stack.Navigator
           screenOptions={{
-            header: CustomNavigationBar,
+            header: (props) => <CustomNavigationBar {...props}/>
+            
           }}>
             
             <Stack.Screen 
               name="Overview"  
               component={MainTabScreen}
+              options={({ route }) => ({
+                headerTitle: getHeaderTitle(route),
+              })}
 
                 
             />
@@ -82,7 +108,11 @@ export default function App() {
           </Stack.Navigator>
           )
         :
-        <Stack.Navigator>
+        <Stack.Navigator
+        screenOptions={{
+          header: (props) => <CustomNavigationBar {...props}/>
+          
+        }}>
         <Stack.Screen 
           name="SignIn" 
           component={SignIn}
@@ -100,15 +130,15 @@ export default function App() {
         <Stack.Screen 
           name="MainTabScreen" 
           component={MainTabScreen}
-          options={{
-            header : CustomNavigationBar
-           }} />
+          options={({ route }) => ({
+            headerTitle: getHeaderTitle(route),
+          })} />
         <Stack.Screen 
           name="Comments" 
           component={Comments}
-          options={{
-        header : CustomNavigationBar
-        }} />
+          options={({ route }) => ({
+            header: CommentsNavigationBar
+          })} />
         <Stack.Screen 
         name="Stockchart" 
         component={Stockchart}
@@ -118,9 +148,9 @@ export default function App() {
         <Stack.Screen 
           name="Settings" 
           component={Settings}
-          options={{
-        header : CustomNavigationBar
-        }} />
+          options={({ route }) => ({
+            header: SettingsNavigationBar
+          })} />
         </Stack.Navigator>
           }
         </NavigationContainer>

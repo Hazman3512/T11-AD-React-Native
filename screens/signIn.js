@@ -42,7 +42,7 @@ export default function SignIn({ navigation }){
 
      function validateForm() {
          if (username == "" || password == ""){
-             Alert.alert("Wrong Input!","Username of password field cannot be empty", [{text: 'OK'}]);
+             Alert.alert("Wrong Input","Username of password field cannot be empty!", [{text: 'OK'}]);
              return false
          }
          return true
