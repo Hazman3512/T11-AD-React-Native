@@ -65,17 +65,17 @@ export default function Search({navigation, route}) {
 
   const handleAddWatchlist = async () => {
     if(await StorageDataService.checkIsStockWatched(stockInfo.stockTicker)){
-      ToastAndroid.showWithGravity('Stock has already been in watchlist!', ToastAndroid.LONG, ToastAndroid.TOP);
+      ToastAndroid.showWithGravity('Stock has already been in watchlist!', ToastAndroid.LONG, ToastAndroid.CENTER);
       console.log(await StorageDataService.getUserWatchlist());
       }
     else{
-      ToastAndroid.showWithGravity('Stock added to watchlist!', ToastAndroid.SHORT, ToastAndroid.TOP);
+      ToastAndroid.showWithGravity('Stock added to watchlist!', ToastAndroid.LONG, ToastAndroid.CENTER);
       //add to storage 
       await StorageDataService.addStockToWatchlist(stockInfo.stockTicker, stockInfo.companyName);
       console.log(await StorageDataService.getUserWatchlist());
       //add to database
       const user = await AsyncStorage.getItem("username");
-      await WatchlistService.addStockWatchlist(stockInfo.stockTicker,user);
+      await WatchlistService.addStockWatchlist(stockInfo.stockTicker,user, stockInfo.companyName);
       console.log(await WatchlistService.getStockWatchlist());
 
     }
