@@ -115,8 +115,8 @@ export default function Settings({ navigation, route }) {
     navigation.navigate("WatchList");
     ToastAndroid.showWithGravity(
       ticker + " candle saved!",
-      ToastAndroid.SHORT,
-      ToastAndroid.TOP
+      ToastAndroid.LONG,
+      ToastAndroid.CENTER
     );
   };
 

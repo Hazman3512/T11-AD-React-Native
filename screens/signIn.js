@@ -25,7 +25,7 @@ export default function SignIn({ navigation }){
         try{
             const watchlist = await WatchlistService.getStockWatchlist(username);
             AsyncStorage.setItem('watchlist', JSON.stringify(watchlist.data));
-            //console.log(await AsyncStorage.getItem('watchlist'));
+            console.log(await AsyncStorage.getItem('watchlist'));
        
         navigation.navigate('MainTabScreen', {screen: 'Search'});
         }catch(error){
@@ -49,10 +49,17 @@ export default function SignIn({ navigation }){
      }
 
     const handleSubmit =  async()  => {
+        try{
         validateForm();
         const loginuser={username:username,password:password}
         const req =  await UserService.authenticateUser(loginuser);
         loginSuccessOrFail(req);
+        }
+        catch(e)
+        {
+            console.log(e);
+
+        }
         
       }
     

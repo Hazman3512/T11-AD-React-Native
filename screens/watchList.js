@@ -18,6 +18,7 @@ import { useEffect, useRef } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import WatchlistService from "../services/WatchlistService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Icon } from 'react-native-elements';
 
 export default function WatchList({ navigation, route }) {
   const isFocused = useIsFocused();
@@ -29,8 +30,8 @@ export default function WatchList({ navigation, route }) {
     try {
       ToastAndroid.showWithGravity(
         stockticker + " deleted from watchlist!",
-        ToastAndroid.SHORT,
-        ToastAndroid.TOP
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER
       );
       //delete from storage
       await StorageDataService.deleteStockToWatchlist(stockticker);
@@ -60,7 +61,7 @@ export default function WatchList({ navigation, route }) {
         console.log(user);
         setWatchlist(
           watchlistData.map((x) => {
-            return { stockticker: x.stockticker };
+            return { stockticker: x.stockticker, stockname: x.stockname };
           })
         );
       } catch (error) {
@@ -89,16 +90,23 @@ export default function WatchList({ navigation, route }) {
   };
 
   const renderItem = (data) => (
-    <TouchableHighlight
-      key={data.item.stockticker}
-      onPress={() => console.log("You pressed me")}
-      style={styles.rowFront}
-      underlayColor={"#AAA"}
-    >
-      <View>
-        <Text>{data.item.stockticker.toUpperCase()}</Text>
-      </View>
-    </TouchableHighlight>
+    <View
+        
+          key={data.item.stockticker}
+          style={styles.rowFront}
+          underlayColor={"#AAA"}
+        >
+          <View style={{flexDirection:"column", flex:1}}>
+            <Text style={{fontSize:18,fontWeight:'bold'}}>{data.item.stockticker.toUpperCase()} </Text>
+            <Text style={{fontSize:12}}>{data.item.stockname}</Text> 
+            
+          </View>
+          <View style={{justifyContent: 'center', alignItems: 'center'}} >
+            <Icon  name="chevron-right" size={25}/> 
+          </View>
+          
+        
+    </View>
   );
 
   const renderHiddenItem = (data) => (
@@ -145,7 +153,6 @@ export default function WatchList({ navigation, route }) {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* <Title style={{alignSelf:'center', marginTop:20}}>My Watchlist</Title> */}
       <SwipeListView
         style={{ marginTop: 20 }}
         useFlatList={true}
@@ -164,124 +171,9 @@ export default function WatchList({ navigation, route }) {
         disableRightSwipe={true}
         closeOnScroll={true}
       />
-      {/* <FlatList
-                data={stocks}
-                renderItem={({ item }) => (
-                    
-                    <Text style={styles.stock}>{item.text}</Text>
-                    
-                )}
-            /> */}
+      
     </View>
 
-    /* <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-        </TouchableOpacity> */
-
-    /* <DataTable>
-        <DataTable.Header style={{marginTop:70}}>
-            <DataTable.Title>No.</DataTable.Title>
-            <DataTable.Title>Stock Ticker</DataTable.Title>
-            <DataTable.Title>Company Name</DataTable.Title>
-            <DataTable.Title  numeric>Actions</DataTable.Title>
-        </DataTable.Header>
-        <DataTable.Row>
-            <DataTable.Cell>1</DataTable.Cell>
-            <DataTable.Cell>AAPL</DataTable.Cell>
-            <DataTable.Cell>Apple Inc</DataTable.Cell>
-            <DataTable.Cell numeric>
-                <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-                </TouchableOpacity>
-                
-                
-            </DataTable.Cell>
-            
-        </DataTable.Row>
-        <DataTable.Row>
-            <DataTable.Cell>2</DataTable.Cell>
-            <DataTable.Cell>PLTR</DataTable.Cell>
-            <DataTable.Cell>Palantir Tech</DataTable.Cell>
-            <DataTable.Cell numeric>
-            <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-            </TouchableOpacity>
-            </DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-            <DataTable.Cell>3</DataTable.Cell>
-            <DataTable.Cell>TSLA</DataTable.Cell>
-            <DataTable.Cell>Tesla</DataTable.Cell>
-            <DataTable.Cell numeric>
-            <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-            </TouchableOpacity>
-            </DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-            <DataTable.Cell>4</DataTable.Cell>
-            <DataTable.Cell>SOFI</DataTable.Cell>
-            <DataTable.Cell>Sofi Tech</DataTable.Cell>
-            <DataTable.Cell numeric>
-            <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-            </TouchableOpacity>
-            </DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-            <DataTable.Cell>5</DataTable.Cell>
-            <DataTable.Cell>BYND</DataTable.Cell>
-            <DataTable.Cell>Beyond Meat</DataTable.Cell>
-            <DataTable.Cell numeric>
-            <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-            </TouchableOpacity>
-            </DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row>
-            <DataTable.Cell>6</DataTable.Cell>
-            <DataTable.Cell>SFT</DataTable.Cell>
-            <DataTable.Cell>Shift Tech</DataTable.Cell>
-            <DataTable.Cell  numeric >
-            <TouchableOpacity>
-                    <Button  icon={{
-                            name: "settings",
-                            size: 25,
-                            color: "#1e3a8a"
-                        }} title="" type="clear"></Button>
-            </TouchableOpacity>
-                
-                
-            </DataTable.Cell>
-        </DataTable.Row>
-        </DataTable>
-        
-        
-        */
   );
 }
 
@@ -293,12 +185,15 @@ const styles = StyleSheet.create({
     color: "black",
   },
   rowFront: {
-    alignItems: "center",
+    paddingLeft:30,
+    textAlign:'left',
     backgroundColor: "white",
     borderTopColor: "grey",
     borderBottomColor: "grey",
     borderBottomWidth: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    flexDirection:"row",
+  
     height: 50,
   },
   rowBack: {
