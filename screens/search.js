@@ -2,9 +2,10 @@ import { Autorenew } from '@material-ui/icons';
 import React from 'react';
 import { useState, useEffect } from 'react'
 //import { FlatList } from 'react-native';
-import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage } from 'react-native';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
-import { Button, Searchbar } from 'react-native-paper';
+import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage, Image } from 'react-native';
+import { ImageBackground } from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import { Button, Searchbar, Text } from 'react-native-paper';
 import ChartService from '../services/ChartService';
 import StorageDataService from '../services/StorageDataService';
 import WatchlistService from '../services/WatchlistService';
@@ -123,8 +124,20 @@ export default function Search({navigation, route}) {
           </Text>
           </View>,
 
-        <View style={{height: 220, marginTop: 20}} key="chart"><Button icon='graph' onPress={handleViewChart}
-          >View Chart</Button></View>,
+        <View style={{height: 220, marginTop: 20}} key="chart">
+          {/* <Button icon='graph' onPress={handleViewChart}
+          >View Chart</Button> */}
+          <TouchableOpacity
+            onPress={handleViewChart}
+          >
+            <ImageBackground style={styles.image} source={require("../assets/blurred_chart.png")} resizeMode="contain">
+              <View style={styles.img_view}> 
+              <Button icon="chart-areaspline-variant" mode="contained" size="small" style={styles.img_btn} labelStyle={styles.img_label}>
+                View Live Chart</Button>
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>,
 
         <Button onPress={handleAddWatchlist} key="addToWatchlist"
           icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
@@ -132,7 +145,7 @@ export default function Search({navigation, route}) {
         </Button>,
 
         <Button key="Comments"
-        mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
+        icon="comment-multiple" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
         onPress={handleShowComment}
         >
         Show Comments
@@ -192,5 +205,28 @@ const styles = StyleSheet.create({
       marginTop: 20,
       marginHorizontal:10,
       textTransform: "none"
+    },
+    image: {
+      marginTop: 20,
+      marginHorizontal: 10,
+      width: 370,
+      height: 200
+    },
+    img_view: {
+      position: 'absolute', 
+      top: 0, 
+      left: 0, 
+      right: 0, 
+      bottom: 0, 
+      justifyContent: 'center', 
+      alignItems: 'center',
+    },
+    img_btn: {
+      backgroundColor: "#8c8c8c",
+      padding: 5,
+      color: "black",
+    },
+    img_label: {
+      color:"white"
     }
 });
