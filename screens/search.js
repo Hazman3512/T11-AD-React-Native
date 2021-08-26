@@ -1,4 +1,3 @@
-import { Autorenew } from '@material-ui/icons';
 import React from 'react';
 import { useState, useEffect } from 'react'
 //import { FlatList } from 'react-native';
@@ -9,6 +8,7 @@ import { Button, Searchbar, Text } from 'react-native-paper';
 import ChartService from '../services/ChartService';
 import StorageDataService from '../services/StorageDataService';
 import WatchlistService from '../services/WatchlistService';
+import { useIsFocused } from '@react-navigation/native';
 
 
 export default function Search({navigation, route}) {
@@ -20,6 +20,8 @@ export default function Search({navigation, route}) {
   const onChangeSearch = query => setSearchQuery(query);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [isInWatchList, setIsInWatchList] = useState(false);
+  const isFocused = useIsFocused();
 
   const [stockInfo, setStockInfo] = useState({
     stockTicker: null,
@@ -63,12 +65,21 @@ export default function Search({navigation, route}) {
     }
   }
 
-  const handleAddWatchlist = async () => {
-    if(await StorageDataService.checkIsStockWatched(stockInfo.stockTicker)){
-      ToastAndroid.showWithGravity('Stock has already been in watchlist!', ToastAndroid.LONG, ToastAndroid.CENTER);
-      console.log(await StorageDataService.getUserWatchlist());
+  useEffect(() => {
+    async function isTickerInWatchList() {
+      if (await StorageDataService.checkIsStockWatched(stockInfo.stockTicker)) {
+        setIsInWatchList(true);
       }
-    else{
+      else {
+        setIsInWatchList(false);
+      }
+    }
+    isTickerInWatchList();
+  }, [isFocused])
+
+
+  const handleAddWatchlist = async () => {
+    
       ToastAndroid.showWithGravity('Stock added to watchlist!', ToastAndroid.LONG, ToastAndroid.CENTER);
       //add to storage 
       await StorageDataService.addStockToWatchlist(stockInfo.stockTicker, stockInfo.companyName);
@@ -77,8 +88,9 @@ export default function Search({navigation, route}) {
       const user = await AsyncStorage.getItem("username");
       await WatchlistService.addStockWatchlist(stockInfo.stockTicker,user, stockInfo.companyName);
       console.log(await WatchlistService.getStockWatchlist());
-
-    }
+      //modify for button
+      setIsInWatchList(true);
+    
   }
 
   const handleShowComment = async() => {
@@ -125,8 +137,6 @@ export default function Search({navigation, route}) {
           </View>,
 
         <View style={{height: 220, marginTop: 20}} key="chart">
-          {/* <Button icon='graph' onPress={handleViewChart}
-          >View Chart</Button> */}
           <TouchableOpacity
             onPress={handleViewChart}
           >
@@ -138,11 +148,13 @@ export default function Search({navigation, route}) {
             </ImageBackground>
           </TouchableOpacity>
         </View>,
-
-        <Button onPress={handleAddWatchlist} key="addToWatchlist"
-          icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}>
-          Add to Watchlist
-        </Button>,
+        
+        <View key = "watchlist">
+          {isInWatchList ? 
+          <Button icon="eye" mode="contained" disabled color="#1e3a8a" size = "small" style={styles.Btn}> Already in watchlist</Button> : 
+          <Button onPress={handleAddWatchlist} 
+          icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}> Add to watchlist </Button>}
+        </View>,
 
         <Button key="Comments"
         icon="comment-multiple" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
