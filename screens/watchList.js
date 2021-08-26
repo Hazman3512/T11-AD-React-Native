@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, FlatList, ToastAndroid } from "react-native";
+import { Text, ToastAndroid } from "react-native";
 import {
   TouchableOpacity,
   TouchableHighlight,
@@ -45,10 +45,6 @@ export default function WatchList({ navigation, route }) {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    console.log("a");
-  });
 
   useEffect(() => {
     async function fetchWatchlist() {
