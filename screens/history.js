@@ -100,15 +100,15 @@ const candleTypes = ['Bullish Engulfing', 'Bearish Engulfing', 'Morning Star', '
             <Card.Content>
             <Title style={{fontSize:15}}>{x.stockticker + ' on ' + x.datetime}</Title>
             {x.candle === candleTypes[0] ? <Paragraph>
-                    <Paragraph style={{color: "green"}}>Bullish </Paragraph>Engulfing Pattern has appeared!</Paragraph> : 
+                    <Paragraph style={{color: "green"}}>Bullish </Paragraph>Engulfing Pattern appeared!</Paragraph> : 
                     (x.candle === candleTypes[1] ? 
                     <Paragraph>
-                    <Paragraph style={{color: "red"}}>Bearish </Paragraph>Engulfing Pattern has appeared!</Paragraph> : 
+                    <Paragraph style={{color: "red"}}>Bearish </Paragraph>Engulfing Pattern appeared!</Paragraph> : 
                         (x.candle === candleTypes[2] ? 
                         <Paragraph>
-                        <Paragraph style={{color: "green"}}>Bullish </Paragraph>Morning Star Pattern has appeared!</Paragraph> : 
+                        <Paragraph style={{color: "green"}}>Bullish </Paragraph>Morning Star Pattern appeared!</Paragraph> : 
                         <Paragraph>
-                        <Paragraph style={{color: "red"}}>Bearish </Paragraph>Evening Star Pattern has appeared!</Paragraph>
+                        <Paragraph style={{color: "red"}}>Bearish </Paragraph>Evening Star Pattern appeared!</Paragraph>
                         )
                     )
                     }
@@ -130,7 +130,7 @@ container: {
   flex:1,
 },
 image: {
-  width: 40,
+  width: 60,
   height: 50,
   alignSelf:'flex-end',
   marginTop:-50,

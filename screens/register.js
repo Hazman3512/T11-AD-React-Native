@@ -29,9 +29,16 @@ export default function Register({navigation}){
     function validateForm() {
         if (username == "" || password == "" || email=="" || confirmPassword=="" ){
             Alert.alert("Empty Field","All fields are required", [{text: 'OK'}]);
-            return false
+            return false;
         }
+        if (password !== confirmPassword){
+            Alert.alert("Alert","Passwords do not match", [{text: 'OK'}]);
+                return false;
+        }
+
+        else{
         return true
+        }
     }
 
     const registerSuccessOrFail=(response)=>{

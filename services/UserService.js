@@ -4,6 +4,7 @@ import "./global";
 
 const USER_API_BASE_URL = global.IP + "users";
 const USER_API_LOGIN_URL = global.IP + "login";
+const USER_VALIDATE_API_URL = global.IP + "users/validate";
 
 class UserService {
   async addUser(User) {
@@ -32,6 +33,18 @@ class UserService {
     // }).catch(error=>{
     //     return error.response;
     // })
+  }
+
+  validateUsername(name) {
+    return axios.post(
+      USER_VALIDATE_API_URL,
+      JSON.stringify({ username: name }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }
 export default new UserService();

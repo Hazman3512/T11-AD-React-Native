@@ -1,21 +1,33 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 //import { FlatList } from 'react-native';
-import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage, Image } from 'react-native';
+import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage, Image, Dimensions } from 'react-native';
 import { ImageBackground } from 'react-native';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import { Button, Searchbar, Text } from 'react-native-paper';
 import ChartService from '../services/ChartService';
 import StorageDataService from '../services/StorageDataService';
 import WatchlistService from '../services/WatchlistService';
 import { useIsFocused } from '@react-navigation/native';
+import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown'
+import { Feather } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default function Search({navigation, route}) {
 
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('Search Stock');
   //const [searchTimer, setSearchTimer] = useState(null);
+
+  const [loading, setLoading] = useState(false)
+  const searchRef = useRef(null)
+  const [suggestions, setSuggestions] = useState([
+  {symbol: "AAPL", description: "APPLE INC"},
+  {symbol: "MSFT", description: "MICROSOFT CORP"},
+  {symbol: "GOOG", description: "ALPHABET INC-CL C"},
+  {symbol: "AMZN", description: "AMAZON.COM INC"},
+  {symbol: "FB", description: "FACEBOOK INC-CLASS A"}]);
 
   const onChangeSearch = query => setSearchQuery(query);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,19 +124,92 @@ export default function Search({navigation, route}) {
     });
   }
 
+  const handleChangeInput = useCallback(async (input) => {
+    //setSearchQuery(input);
+    //get top 5 suggestions
+    const req = await ChartService.getTop5Stock(input);
+    //console.log(req.data);
+    await setSuggestions(req.data);
+
+},[])
+
+const handleSuggestionClick = useCallback(async (item) => {
+  console.log(item)
+  await setSearchQuery(item.symbol);
+  //send request to fetch data
+  getInitialPrice(item.symbol);
+  
+},[])
+
+
+
 
     return (
       <ScrollView>
-        <View style={styles.container} >
-        <Searchbar
+        < View style={{marginTop: 8, width: '95%', height: 610, marginLeft: 10, marginRight: 10, zIndex: 1}}>
+    {/* <Searchbar
         style={{borderRadius:5}}
         placeholder="Search Stocks"
         onChangeText={(text) =>setSearchQuery(text)}
         value={searchQuery}
         onIconPress={()=> handleSearch(searchQuery)}
-        />
-        </View>
-        {isLoading ? <View style={styles.loading}><ActivityIndicator size='large' color="#0000ff"/></View> : <View>
+        />  */}
+        <AutocompleteDropdown
+        ref={searchRef}
+        initialValue={searchQuery}
+        dataSet={suggestions}
+        onChangeText={text => handleChangeInput(text)}
+        onSelectItem={(item) => {
+          handleSuggestionClick(item)
+        }}
+        renderItem={(item, text, index) => (
+            <View key={index} style={{width: '100%'}}><Text style={{ color: "#fff", padding: 15 }}>{item.symbol + ' - ' + item.description} </Text></View>
+        )}
+        debounce={300}
+        loading={loading}
+        useFilter={false} 
+        textInputProps={{
+          placeholder: searchQuery,
+          autoCorrect: false,
+          autoCapitalize: "none",
+          style: {
+            borderRadius: 25,
+            backgroundColor: "#383b42",
+            color: "#fff",
+            paddingLeft: 18,
+          }
+        }}
+        suggestionsListMaxHeight={Dimensions.get("window").height * 0.4}
+        rightButtonsContainerStyle={{
+          borderRadius: 25,
+          right: 8,
+          height: 30,
+          top: 10,
+          alignSelfs: "center",
+          backgroundColor: "#383b42"
+        }}
+        inputContainerStyle={{
+          backgroundColor: "transparent",
+          
+        }}
+        suggestionsListContainerStyle={{
+          backgroundColor: "#383b42",
+        }}
+        containerStyle={{ flexGrow: 1, flexShrink: 1, 
+          height: 308, width: '100%', zIndex: 4000, position: 'absolute'}}
+        ChevronIconComponent={
+          <Feather name="x-circle" size={18} color="#fff" />
+        }
+        ClearIconComponent={
+          <Feather name="chevron-down" size={20} color="#fff" />
+        }
+        inputHeight={50}
+        showChevron={false}
+      />
+      
+        
+        {isLoading ? <View style={styles.loading}><ActivityIndicator size='large' color="#0000ff"/></View> : 
+        <View style={{zIndex: -1, marginTop: 56, position: 'relative', width: '100%'}}>
         {stockInfo.stockTicker ? 
         [
         <View style = {styles.container} key="stockinfo">
@@ -136,7 +221,7 @@ export default function Search({navigation, route}) {
           </Text>
           </View>,
 
-        <View style={{height: 220, marginTop: 20}} key="chart">
+        <View style={{height: 220, marginTop: 150, zIndex: -1, position: 'absolute'}} key="chart">
           <TouchableOpacity
             onPress={handleViewChart}
           >
@@ -149,23 +234,24 @@ export default function Search({navigation, route}) {
           </TouchableOpacity>
         </View>,
         
-        <View key = "watchlist">
+        <View key = "watchlist" style={{zIndex: -1, marginTop: 400, position: 'absolute', width: '100%'}}>
           {isInWatchList ? 
           <Button icon="eye" mode="contained" disabled color="#1e3a8a" size = "small" style={styles.Btn}> Already in watchlist</Button> : 
-          <Button onPress={handleAddWatchlist} 
-          icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}> Add to watchlist </Button>}
+          <TouchableOpacity onPress={handleAddWatchlist} >
+          <Button 
+          icon="eye" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}> Add to watchlist </Button></TouchableOpacity>}
         </View>,
-
-        <Button key="Comments"
+        <View  style={{zIndex: -1, marginTop: 450, position: 'absolute', width: '100%'}} ><TouchableOpacity onPress={handleShowComment}>
+        <Button key="Comments" 
         icon="comment-multiple" mode="contained" color="#1e3a8a" size = "small" style={styles.Btn}
-        onPress={handleShowComment}
+        
         >
         Show Comments
-        </Button>
+        </Button></TouchableOpacity></View>
         ]
           : <View style={styles.noSearchStock}><Text>There is no such stock symbol</Text></View>
           }
-          </View>}
+          </View>}</View>
        
       </ScrollView>
     );
@@ -173,8 +259,8 @@ export default function Search({navigation, route}) {
 }
 
 const styles = StyleSheet.create({
-    noSearchStock: {
-      marginTop: 40, marginLeft: 'auto', marginRight: 'auto'
+    noSearchStock: { zIndex: 1, marginTop: 40,
+       marginLeft: 'auto', marginRight: 'auto'
     },
     loading: {
       flex: 1,
@@ -182,7 +268,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-around",
       padding: 10,
-      marginTop: 40,
+      marginTop: 0,
       marginBottom: 'auto'
     },
     container: {

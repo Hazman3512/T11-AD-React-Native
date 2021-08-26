@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {   Alert,StyleSheet, TouchableOpacity, View } from 'react-native';
+import {   Alert,StyleSheet, TouchableOpacity, View, ToastAndroid } from 'react-native';
 import { Title,Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import UserService from "../services/UserService";
@@ -19,23 +19,25 @@ export default function SignIn({ navigation }){
     //Authentication code
     const loginSuccessOrFail= async (response)=>{
         if(response.status == 200){
-          
         AsyncStorage.setItem('username', username);
         //store user pre-saved watchlist
         try{
             const watchlist = await WatchlistService.getStockWatchlist(username);
             AsyncStorage.setItem('watchlist', JSON.stringify(watchlist.data));
             console.log(await AsyncStorage.getItem('watchlist'));
+            
        
         navigation.navigate('MainTabScreen', {screen: 'Search'});
         }catch(error){
             console.log(error);
+            
         }
 
         }
         else{
-          console.log(response.status);
+            isSuccess(false);
           setIsSuccess(false);
+        
         }
         return;
       };
@@ -44,8 +46,22 @@ export default function SignIn({ navigation }){
          if (username == "" || password == ""){
              Alert.alert("Wrong Input","Username of password field cannot be empty!", [{text: 'OK'}]);
              return false
+         }if (isSuccess == false)
+         {
+             Alert.alert("Incorrect Input", "Username or password is incorrect!", [{text: 'OK'}]);
+             return false
          }
          return true
+     }
+
+     function handleError(){
+        if (isSuccess == false)
+        {
+            Alert.alert("Incorrect Input", "Username or password is incorrect!", [{text: 'OK'}]);
+            return false;
+        }
+        return true;
+
      }
 
     const handleSubmit =  async()  => {
@@ -54,6 +70,7 @@ export default function SignIn({ navigation }){
         const loginuser={username:username,password:password}
         const req =  await UserService.authenticateUser(loginuser);
         loginSuccessOrFail(req);
+        
         }
         catch(e)
         {
@@ -82,6 +99,7 @@ export default function SignIn({ navigation }){
                     value={username}
                     mode='outlined'
                     onChangeText={username => setUsername(username)}
+                    
                 />
 
                 <TextInput style={{marginTop:20, paddingHorizontal:10}}
@@ -113,7 +131,12 @@ export default function SignIn({ navigation }){
                     style={{marginTop:20}}
                     onPress={() => navigation.navigate('Register')}
                     >Register here</Button>
-                 </TouchableOpacity>     
+                 </TouchableOpacity>
+
+                 {/* {isSuccess ?  <View />: <View>
+                <Text style={{color:'red', fontSize:20}} >Information above is incorrect. Please try again!
+                 </Text></View>} */}
+                    
                 
             </View>
         

@@ -183,11 +183,11 @@ export default function Settings({ navigation, route }) {
       >
         <Button
           style={{
-            marginTop: 5,
+            marginTop: 15,
             marginHorizontal: 70,
             marginBottom: 10,
           }}
-          color="#1e3a8a"
+          color="#992220"
           mode="contained"
           icon="cancel"
           onPress={() => navigation.navigate("WatchList")}
@@ -196,7 +196,7 @@ export default function Settings({ navigation, route }) {
         </Button>
         <Button
           style={{
-            marginTop: 5,
+            marginTop: 15,
             marginHorizontal: 70,
             marginBottom: 10,
           }}

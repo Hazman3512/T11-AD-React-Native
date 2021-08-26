@@ -28,7 +28,7 @@ function SettingsNavigationBar({ navigation, route, previous }) {
         backgroundColor: "white",
       }}
     >
-      {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
+      <Appbar.Action icon="chevron-left" onPress={ () => {navigation.goBack() }}></Appbar.Action>
       <Appbar.Content title="Settings"></Appbar.Content>
       <Appbar.Action icon="logout" onPress={handleLogout} />
     </Appbar.Header>
