@@ -1,33 +1,20 @@
-import React, { useState, useEffect} from 'react';
-import { Keyboard, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
-import { globalStyles } from './styles/global';
-import { Searchbar, DataTable, FAB } from 'react-native-paper';
+import React, { useState, useEffect, useRef} from 'react';
+import { StyleSheet, View } from 'react-native';
+import { FAB, TextInput, Provider, Portal, Dialog} from 'react-native-paper';
 import { Button, Text, Card, Icon } from 'react-native-elements';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
-import WatchlistService from '../services/WatchlistService';
 import StockService from '../services/StockService'
 import { FlatList } from 'react-native';
 
 export default function Comments({ navigation, route }){
 
-    const { ticker } = route.params;
+    const { ticker, user } = route.params;
 
     const [comments, setComments] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    
-    const dummyComments = [{user: "zavier", timestamp: "0000", content: "test 123"},
-                            {user: "zavier2", timestamp: "0000", content: "2nd comment"},
-                            {user: "molly", timestamp: "0000", content: "test 123"},
-                            {user: "seb", timestamp: "0000", content: "2nd comment"},
-                            {user: "sam", timestamp: "0000", content: "test 123"},
-                            {user: "tin", timestamp: "0000", content: "2nd comment"},
-                            {user: "mox", timestamp: "0000", content: "test 123"},
-                            {user: "sal", timestamp: "0000", content: "2nd comment"},
-                            {user: "bro", timestamp: "0000", content: "test 123"},
-                            {user: "sue", timestamp: "0000", content: "2nd comment"},
-
-    ];
+    const [newCommentText, setNewCommentText] = useState("");
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
 
     const addComments = (newComment) => {
         setComments([newComment, ...comments]);
@@ -73,33 +60,6 @@ export default function Comments({ navigation, route }){
         );
       }
 
-    // useEffect(() => {
-    //     const req = StockService.getStockComments(ticker)
-    //     const commentData = req.data    
-    //     req.then(({ comments }) => {
-    //         console.log(commentData)
-    //         setComments(commentData.map((x) => {
-    //             return ({user: x.username, timestamp: x.commentDateTime, content: x.comment});
-    //         }))
-    //         console.log("comments: ")
-    //         console.log(comments)
-    //         console.log(comments.length)
-    //     })
-    //         .catch((error) => console.log(error))
-    //         .finally(() => setLoading(false));
-    //     });
-
-       
-    const AddCommentFAB = () => (
-        <FAB
-          style={styles.fab}
-          icon="plus"
-          color= '#1e3a8a'
-          onPress={
-              () => console.log('Pressed')
-            }
-        />
-      );
 
     const CommentInfo = ({ user, timestamp, content }) => (
         <View style={styles.item}>
@@ -109,19 +69,81 @@ export default function Comments({ navigation, route }){
                 {" "}{ user }
             </Text>
             <Text style={styles.content}>{ content }</Text>
-            <Text style={styles.timestamp}>{ "posted on: " + timestamp }</Text>
+            <Text style={styles.timestamp}>posted on: {timestamp}</Text>
             </Card>
         </View>
     )
 
     const renderItem = ({ item }) => (
-            <CommentInfo user={item.user} timstamp={item.timestamp} content={item.content} />
+            <CommentInfo user={item.user} timestamp={item.timestamp} content={item.content} />
         );
+    
+              
+    const AddCommentFAB = () => (
+        <FAB
+          style={styles.fab}
+          icon="plus"
+          color= '#1e3a8a'
+          onPress={
+              () => setIsDialogVisible(true)
+            }
+        />
+    );
+
+    const renderAddCommentPopup = () => (
+
+            <Dialog
+            visible={isDialogVisible}
+            onDismiss={() => setIsDialogVisible(false)}>
+            <Dialog.Title>Post Comment</Dialog.Title>
+            <Dialog.Content>
+                <Text>Comment</Text>
+                <TextInput
+                    defaultValue={newCommentText}
+                    multiline
+                    onChangeText={(text) => {setNewCommentText(text)}}
+                />
+            </Dialog.Content>
+            <Dialog.Actions>
+                <TouchableOpacity
+                style={styles.button}
+                onPress={() => setIsDialogVisible(false)}>
+                    <Text>Cancel</Text>
+                </TouchableOpacity>
+                <View style={styles.space}></View>
+                <TouchableOpacity 
+                style={styles.button}
+                onPress={() => {
+                    handleSubmissionAndClose();
+                    }}>
+                <Text>Submit</Text>
+                </TouchableOpacity>
+            </Dialog.Actions>
+            </Dialog>
+        
+    )
+
+    const handleSubmissionAndClose = async () => {
+        const postComment = {username: user, commentDateTime: Math.floor(Date.now()/1000), stockticker: ticker, comment: newCommentText}
+        try {
+            const Resp = await StockService.postStockComment(ticker, postComment)
+            const data = Resp.data;
+            // console.log(data);
+            const comment = {...data, user: data.username, timestamp: data.commentDateTime, content: data.comment}
+            addComments(comment)
+        } catch (error) {
+            console.log("error submitting comment")
+            console.log(error)
+        }
+
+        setIsDialogVisible(false);
+        setNewCommentText("");
+    }
     
 
     return(
+        <Provider>
         <View style={{backgroundColor:'white', flex:1}}>
-            {console.log(comments)}
             {(comments.length !== 0) ? 
         <FlatList
             data={comments}
@@ -132,7 +154,9 @@ export default function Comments({ navigation, route }){
          
         : <View></View> }
         <AddCommentFAB />
+        {renderAddCommentPopup()}
         </View>
+        </Provider>
         
     )
 }
@@ -144,7 +168,6 @@ const styles = StyleSheet.create({
         margin: 24,
         right: 0,
         bottom: 0,
-        
       },
     container:{
         padding: 10
@@ -164,7 +187,16 @@ const styles = StyleSheet.create({
     },
     timestamp: {
         fontSize: 15,
-        color: "gray",
         marginLeft: 30,
+        color: "gray"
+    },
+    button: {
+        alignItems: "center",
+        padding: 5,
+        backgroundColor: "#DDDDDD",
+    },
+    space: {
+        width: 10,
+        height: 20,
     }
 })

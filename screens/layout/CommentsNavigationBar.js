@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
-function CustomNavigationBar({ navigation, route, previous }) {
+function CommentsNavigationBar({ navigation, route, previous }) {
   const routeName = getFocusedRouteNameFromRoute(route);
   const { signOut } = React.useContext(AuthContext);
   //const navigation = useNavigation();
@@ -14,7 +14,7 @@ function CustomNavigationBar({ navigation, route, previous }) {
   const handleLogout = async () => {
     try {
       //console.log(AsyncStorage.getItem('username'));
-       AsyncStorage.clear();
+      AsyncStorage.clear();
       //console.log(await AsyncStorage.getItem('username'));
       navigation.navigate("SignIn");
     } catch (e) {
@@ -29,10 +29,10 @@ function CustomNavigationBar({ navigation, route, previous }) {
       }}
     >
       {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-      <Appbar.Content title={routeName}></Appbar.Content>
+      <Appbar.Content title="Comments"></Appbar.Content>
       <Appbar.Action icon="logout" onPress={handleLogout} />
     </Appbar.Header>
   );
 }
 
-export default CustomNavigationBar;
+export default CommentsNavigationBar;

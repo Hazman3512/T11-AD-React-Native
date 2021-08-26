@@ -1,8 +1,8 @@
 import axios from "axios";
+import "./global";
 
-const IP = 'http://192.168.0.113/';
-const STOCK_WATCHLIST_API_URL = IP + "watchlist/";
-const CANDLE_WATCHLIST_API_URL = IP + "watchlist/candlewatchlist/";
+const STOCK_WATCHLIST_API_URL = global.IP + "watchlist/";
+const CANDLE_WATCHLIST_API_URL = global.IP + "watchlist/candlewatchlist/";
 
 class WatchlistService {
   getStockWatchlist(user) {
