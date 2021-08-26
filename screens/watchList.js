@@ -92,6 +92,63 @@ export default function WatchList({ navigation, route }) {
           style={styles.rowFront}
           underlayColor={"#AAA"}
         >
+
+            <View>
+                <Text>{data.item.stockticker}</Text>
+            </View>
+        </TouchableHighlight>
+    );
+    
+    const navigateToStock=(data,rowMap)=>{
+		<TouchableHighlight onPress={()=>{
+			const {navigator} =this.props;
+			if(navigator){
+				navigator.push({name:'detail',component:Detail});
+			}
+		}}>
+			<View>
+				
+				<View>
+					<Text>{stockInfo.companyName}</Text>
+		          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
+		          <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
+		          <Text></Text>
+		          <Text style = {styles.sentiment}>Sentiment: 
+		            <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
+		          </Text>
+		          <View style={{height: 220, marginTop: 20}}><Button icon='graph'>View Chart</Button></View>
+				</View>
+			</View>
+		</TouchableHighlight>
+	
+	}
+
+    const renderHiddenItem = (data, rowMap) => (
+        <View style={styles.rowBack}>
+            <Text>Left</Text>
+            <TouchableOpacity
+                style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                onPress={() => closeRow(rowMap, data.item.key)}
+            >
+                <Button>
+                    <MaterialIcons name="settings" size={24} color="#1e3a8a" />
+                </Button>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.backRightBtn, styles.backRightBtnRight]}
+                onPress={DeleteAlert/*() => deleteRow(rowMap, data.item.key)*/}
+            >
+                {/* <Text style={styles.backTextWhite}>Delete</Text> */}
+                <Button>
+                <MaterialIcons name="delete" size={24} color="#1e3a8a" />
+                
+                </Button>
+            </TouchableOpacity>
+        </View>
+    );
+
+    const DeleteAlert = ({handleDeleteWatchlist}) =>
+
           <View style={{flexDirection:"column", flex:1}}>
             <Text style={{fontSize:18,fontWeight:'bold'}}>{data.item.stockticker.toUpperCase()} </Text>
             <Text style={{fontSize:12}}>{data.item.stockname}</Text> 
@@ -133,6 +190,7 @@ export default function WatchList({ navigation, route }) {
   );
 
   const DeleteAlert = (ticker) =>
+
     Alert.alert(
       "Delete " + ticker + " from Watchlist?",
       "*Note that your notification settings for this stock will be deleted as well!",

@@ -8,6 +8,9 @@ import {
 } from "@react-navigation/native";
 import SignIn from "./screens/signIn";
 import { AuthContext } from "./context";
+
+import {Platform} from 'react-native';
+import {initnotify, getToken} from 'expo-push-notification-helper';
 import { createStackNavigator } from "@react-navigation/stack";
 import MainTabScreen from "./screens/MainTabScreen";
 import Comments from "./screens/comments";
@@ -22,6 +25,7 @@ import StockChartNavigationBar from "./screens/layout/StockChartNavigationBar";
 import SettingsNavigationBar from "./screens/layout/SettingsNavigationBar";
 import CommentsNavigationBar from "./screens/layout/CommentsNavigationBar";
 import WatchList from "./screens/watchList";
+
 
 export default function App() {
   function getHeaderTitle(route) {
@@ -46,7 +50,42 @@ export default function App() {
 
   const Stack = createStackNavigator();
   const [isLoading, setIsLoading] = React.useState(true);
+
+  const [ userToken, setUserToken] = React.useState(null);
+  
+  const getToken = async () => {
+   let { status } = await Expo.Permissions.askAsync(
+      Expo.Permissions.NOTIFICATIONS
+   );
+   if(status !== 'granted') { return; }
+   let token = await Expo.Notifications.getExpoPushTokenAsync();
+   console.log(token);
+   
+   fetch('https://exp.host/--/api/v2/push/send', {       
+         method: 'POST', 
+         headers: {
+               Accept: 'application/json',  
+              'Content-Type': 'application/json', 
+              'accept-encoding': 'gzip, deflate',   
+              'host': 'exp.host'      
+          }, 
+        body: JSON.stringify({                 
+              to: token,                        
+              title: 'New Notification',                  
+              body: 'The notification worked!',             
+              priority: "high",            
+              sound:"default",              
+              channelId:"default",   
+                  }),        
+      }).then((response) => response.json())   
+               .then((responseJson) => {  })
+                      .catch((error) => { console.log(error) });
+  }
+  
+  const authContext = React.useMemo(() => ({
+
   const [userToken, setUserToken] = React.useState(null);
+
 
   const authContext = React.useMemo(() => ({
     signIn: () => {
