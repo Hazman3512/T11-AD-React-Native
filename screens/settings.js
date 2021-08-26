@@ -114,7 +114,7 @@ export default function Settings({ navigation, route }) {
   const navigateback = () => {
     navigation.navigate("WatchList");
     ToastAndroid.showWithGravity(
-      ticker + " candle saved!",
+      ticker.toUpperCase() + " candle saved!",
       ToastAndroid.LONG,
       ToastAndroid.CENTER
     );

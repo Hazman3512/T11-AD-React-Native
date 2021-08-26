@@ -29,32 +29,13 @@ export default function History(){
     }
   }
  
-  const candleTypes = [
-    {
-      id: "1",
-      name: "Bullish Engulfing",
-      imgSrc: require("../assets/bullish_engulfing.png"),
-    },
-    {
-      id: "2",
-      name: "Bearish Engulfing",
-      imgSrc: require("../assets/bearish_engulfing.png"),
-    },
-    {
-      id: "3",
-      name: "Morning Star",
-      imgSrc: require("../assets/morning_star.png"),
-    },
-    {
-      id: "4",
-      name: "Evening Star",
-      imgSrc: require("../assets/evening_star.png"),
-    },
-  ];
+  
+const candleTypes = ['Bullish Engulfing', 'Bearish Engulfing', 'Morning Star', 'Evening Star'];
  
   useEffect(() => {
     async function fetchWatchlist(){
         try{
+            
             const req = await StorageDataService.getUserWatchlist();
             const watchlistData = req;
             //console.log(watchlistData);
@@ -96,7 +77,7 @@ export default function History(){
           itemStyle={{backgroundColor: 'white'}}
           onValueChange={(itemValue, itemIndex) =>
             setSelectedStock(itemValue)}>
-            {watchlist && watchlist.map((x,index) => (<SelectPicker.Item key={index} label={x.stockticker} value={x.stockticker} />))}
+            {watchlist && watchlist.map((x,index) => (<SelectPicker.Item key={index} label={x.stockticker.toUpperCase()} value={x.stockticker} />))}
         </SelectPicker>
       
       
@@ -118,7 +99,19 @@ export default function History(){
             <Card key={index} style={{marginTop:12, marginHorizontal:10}}>
             <Card.Content>
             <Title style={{fontSize:15}}>{x.stockticker + ' on ' + x.datetime}</Title>
-            <Paragraph style={{fontSize:12}}>{x.candle} Pattern has appeared</Paragraph>
+            {x.candle === candleTypes[0] ? <Paragraph>
+                    <Paragraph style={{color: "green"}}>Bullish </Paragraph>Engulfing Pattern has appeared!</Paragraph> : 
+                    (x.candle === candleTypes[1] ? 
+                    <Paragraph>
+                    <Paragraph style={{color: "red"}}>Bearish </Paragraph>Engulfing Pattern has appeared!</Paragraph> : 
+                        (x.candle === candleTypes[2] ? 
+                        <Paragraph>
+                        <Paragraph style={{color: "green"}}>Bullish </Paragraph>Morning Star Pattern has appeared!</Paragraph> : 
+                        <Paragraph>
+                        <Paragraph style={{color: "red"}}>Bearish </Paragraph>Evening Star Pattern has appeared!</Paragraph>
+                        )
+                    )
+                    }
             <Image style={styles.image} source={getSource(x.candle)}/> 
             </Card.Content></Card>
         ))
@@ -140,6 +133,17 @@ image: {
   width: 70,
   height: 50,
   alignSelf:'flex-end',
-  marginTop:-50
+  marginTop:-50,
+},
+redText : {
+  backgroundColor: 'red',
+  fontWeight: '700',
+},
+greenText : {
+  backgroundColor: 'green',
+  fontWeight: '700',
+
+},
+
 }
-}); 
+); 
