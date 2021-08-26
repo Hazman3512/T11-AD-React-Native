@@ -105,6 +105,30 @@ export default function WatchList({ navigation, route }) {
     </View>
   );
 
+  const navigateToStock=(data,rowMap)=>{
+		<TouchableHighlight onPress={()=>{
+			const {navigator} =this.props;
+			if(navigator){
+				navigator.push({name:'detail',component:Detail});
+			}
+		}}>
+			<View>
+				
+				<View>
+					<Text>{stockInfo.companyName}</Text>
+		          <Text style = {styles.stockTicker}>{stockInfo.stockTicker}</Text>
+		          <Text style={styles.initialPrice}>{(stockInfo.initialPrice).toFixed(2)}</Text>
+		          <Text></Text>
+		          <Text style = {styles.sentiment}>Sentiment: 
+		            <Text style = {styles.sentimentInner}> {stockInfo.sentiment}</Text> 
+		          </Text>
+		          <View style={{height: 220, marginTop: 20}}><Button icon='graph'>View Chart</Button></View>
+				</View>
+			</View>
+		</TouchableHighlight>
+	
+	}
+	
   const renderHiddenItem = (data) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
