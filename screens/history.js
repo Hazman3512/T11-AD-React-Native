@@ -130,20 +130,12 @@ container: {
   flex:1,
 },
 image: {
-  width: 70,
+  width: 40,
   height: 50,
   alignSelf:'flex-end',
   marginTop:-50,
 },
-redText : {
-  backgroundColor: 'red',
-  fontWeight: '700',
-},
-greenText : {
-  backgroundColor: 'green',
-  fontWeight: '700',
 
-},
 
 }
 ); 
