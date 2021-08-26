@@ -17,8 +17,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "*_displayInForeground*":true
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -30,6 +29,5 @@
       "favicon": "./assets/favicon.png"
     },
     "description": "T11 AD with React Native"
-    
   }
 }
