@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, ToastAndroid } from "react-native";
+import { Text, ToastAndroid, SafeAreaView} from "react-native";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -15,6 +15,7 @@ import { useIsFocused } from "@react-navigation/native";
 import WatchlistService from "../services/WatchlistService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from 'react-native-elements';
+import { TouchableWithoutFeedback } from "react-native";
 
 export default function WatchList({ navigation, route }) {
   const isFocused = useIsFocused();
@@ -82,14 +83,23 @@ export default function WatchList({ navigation, route }) {
     console.log("This row opened", rowKey);
   };
 
+  const handleViewChart = (stock) => {
+    //console.log(stock);
+    navigation.navigate('Stockchart', {
+      ticker: stock,
+    });
+  }
+
   const renderItem = (data) => (
-    
+    <TouchableOpacity onPress={()=>handleViewChart(data.item.stockticker)}>
     <View
-        
+         
           key={data.item.stockticker}
           style={styles.rowFront}
           underlayColor={"#AAA"}
         >
+         
+          
           <View style={{flexDirection:"column", flex:1}}>
             <Text style={{fontSize:18,fontWeight:'bold'}}>{data.item.stockticker.toUpperCase()} </Text>
             <Text style={{fontSize:12}}>{data.item.stockname}</Text> 
@@ -99,8 +109,10 @@ export default function WatchList({ navigation, route }) {
             <Icon  name="chevron-right" size={25}/> 
           </View>
           
-        
-    </View>
+         
+    </View></TouchableOpacity>
+    
+    
     
     
   );
@@ -148,7 +160,7 @@ export default function WatchList({ navigation, route }) {
     );
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <SwipeListView
         style={{ marginTop: 20 }}
         useFlatList={true}
@@ -167,8 +179,10 @@ export default function WatchList({ navigation, route }) {
         disableRightSwipe={true}
         closeOnScroll={true}
       />
+      <View></View>
       
-    </View>
+    </SafeAreaView>
+      
 
   );
 }

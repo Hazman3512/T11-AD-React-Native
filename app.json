@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "T11 AD Mobile",
-    "slug": "t11-ad-mobile",
+    "slug": "t11admobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

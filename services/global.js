@@ -1,1 +1,1 @@
-global.IP = "http://192.168.1.78:5000/";
+global.IP = "http://t11adproject-env.eba-hyey7nfu.ap-southeast-1.elasticbeanstalk.com//";

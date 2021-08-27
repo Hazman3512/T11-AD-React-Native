@@ -225,7 +225,7 @@ const handleSuggestionClick = useCallback(async (item) => {
           </Text>
           </View>,
 
-        <View style={{height: 220, marginTop: 150, zIndex: -1, position: 'absolute'}} key="chart">
+        <View style={{height: 200, marginTop: 150, zIndex: -1, position: 'absolute'}} key="chart">
           <TouchableOpacity
             onPress={handleViewChart}
           >
@@ -310,12 +310,13 @@ const styles = StyleSheet.create({
     },
     image: {
       marginTop: 20,
-      marginHorizontal: 10,
+      marginHorizontal: 0,
       width: 370,
-      height: 200
+      height: 230
     },
     img_view: {
-      position: 'absolute', 
+      position: 'absolute',
+      paddingRight:0, 
       top: 0, 
       left: 0, 
       right: 0, 
