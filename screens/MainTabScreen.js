@@ -1,8 +1,6 @@
 import React from "react";
-
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { AuthContext } from "../context";
 import CustomNavigationBar from "./layout/CustomNavigationBar";
 import Search from "./search";
 import WatchList from "./watchList";
@@ -12,7 +10,6 @@ import StorageDataService from "../services/StorageDataService";
 const Tab = createMaterialBottomTabNavigator();
 
 export default function MainTabScreen({ navigation }) {
-  const { signOut } = React.useContext(AuthContext);
 
   return (
     <Tab.Navigator

@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import { Text, ToastAndroid } from "react-native";
 import {
   TouchableOpacity,
-  TouchableHighlight,
-  ScrollView,
-  Keyboard,
   StyleSheet,
   View,
   Alert,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { Button, Title } from "react-native-paper";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { Button } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import StorageDataService from "../services/StorageDataService";
 import { useEffect, useRef } from "react";
@@ -19,7 +15,6 @@ import { useIsFocused } from "@react-navigation/native";
 import WatchlistService from "../services/WatchlistService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback } from "react-native";
 
 export default function WatchList({ navigation, route }) {
   const isFocused = useIsFocused();

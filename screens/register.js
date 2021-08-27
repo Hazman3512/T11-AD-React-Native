@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {  Alert, ToastAndroid ,StyleSheet, TouchableOpacity, View } from 'react-native';
 import {Title,Provider, Text, Button, TextInput } from 'react-native-paper';
-import { AuthContext } from "../context";
 import { Avatar } from "react-native-elements";
 import UserService from "../services/UserService";
 import validator from 'validator'

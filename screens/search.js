@@ -134,11 +134,15 @@ export default function Search({navigation, route}) {
 },[])
 
 const handleSuggestionClick = useCallback(async (item) => {
+  try{
   console.log(item)
   await setSearchQuery(item.symbol);
   //send request to fetch data
   getInitialPrice(item.symbol);
-  
+  }
+  catch(e){
+    console.log(e);
+  }
 },[])
 
 

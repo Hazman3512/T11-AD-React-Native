@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {   Alert,StyleSheet, TouchableOpacity, View, ToastAndroid } from 'react-native';
+import {   Alert,StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Title,Text, Button, TextInput } from 'react-native-paper';
-import { AuthContext } from "../context";
 import UserService from "../services/UserService";
 import { Avatar } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,7 +9,6 @@ import WatchlistService from '../services/WatchlistService';
 
 export default function SignIn({ navigation }){
     
-    const { signIn } = React.useContext(AuthContext);
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [isSuccess, setIsSuccess] = React.useState(true);
