@@ -71,8 +71,8 @@ const candleTypes = ['Bullish Engulfing', 'Bearish Engulfing', 'Morning Star', '
     
     <View style={styles.container}>
       {/* <Title style={{alignSelf:'center',marginTop:20}}>Alert History</Title> */}
-      <View style={{backgroundColor: 'white',marginHorizontal:50,marginTop:20,flexDirection: 'row' }}>        
-        <SelectPicker style={{flex:3, marginLeft:0,marginRight: 0}} mode='dropdown' dropdownIconColor='black' dropdownIconRippleColor='black'
+      <View style={{backgroundColor: 'white',marginHorizontal:50,marginTop:20,flexDirection: 'row'}}>        
+        <SelectPicker style={{flex:3, marginLeft:0,marginRight: 0, marginBottom:-10}} mode='dropdown' dropdownIconColor='black' dropdownIconRippleColor='black'
           selectedValue={selectedStock}
           itemStyle={{backgroundColor: 'white'}}
           onValueChange={(itemValue, itemIndex) =>
@@ -82,7 +82,7 @@ const candleTypes = ['Bullish Engulfing', 'Bearish Engulfing', 'Morning Star', '
       
       
           <Button
-            style={{flex:1}}
+            style={{flex:1,alignSelf:'center'}}
             color="#1e3a8a" 
             icon="chart-bar" 
             mode="contained" 

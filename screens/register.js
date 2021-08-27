@@ -4,40 +4,58 @@ import {Title,Provider, Text, Button, TextInput } from 'react-native-paper';
 import { AuthContext } from "../context";
 import { Avatar } from "react-native-elements";
 import UserService from "../services/UserService";
+import validator from 'validator'
+
 
 
 export default function Register({navigation}){
 
     
-    const { register } = React.useContext(AuthContext);
     const [registration,setregistration]=useState(false);
     const [username, setUsername] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword,setConfirmPassword] = React.useState('');
-    
-    //to put handleSubmit in onPress for Register button
+    const [errorMsg1, setErrorMsg1] = useState('');
+
+    const handleUserChange = async () => {
+        setUsername(username);
+        const resp = await UserService.validateUsername(username);
+        //console.log(resp.data);
+        if(resp.data){
+          if(resp.data.exist){
+            Alert.alert("Alert","Username taken! Please use a new one", [{text: 'OK'}]);
+            setErrorMsg1('usernameError');
+          }else{
+              setErrorMsg1('');
+          }
+        }
+      }
+
+      
 
 
     const handleSubmit = () => {
-        validateForm();
+        if( validateForm(true)){
         const newuser = {username:username,password:password,email:email,role:1};
         console.log(JSON.stringify(newuser));
         UserService.addUser(newuser).then(res=>(registerSuccessOrFail(res)))
+        }
     };
 
+    //check 
     function validateForm() {
         if (username == "" || password == "" || email=="" || confirmPassword=="" ){
             Alert.alert("Empty Field","All fields are required", [{text: 'OK'}]);
             return false;
-        }
-        if (password !== confirmPassword){
+        }else if (!validator.isEmail(email)){
+            Alert.alert("Incorrect e-mail","Please input the correct e-mail format", [{text: 'OK'}]);
+            return false;
+        } else if (!validator.equals(password,confirmPassword)){
             Alert.alert("Alert","Passwords do not match", [{text: 'OK'}]);
-                return false;
-        }
-
-        else{
-        return true
+            return false;
+        }else{
+        return true;
         }
     }
 
