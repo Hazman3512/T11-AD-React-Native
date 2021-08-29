@@ -4,6 +4,7 @@ import { FAB, TextInput, Provider, Portal, Dialog} from 'react-native-paper';
 import { Button, Text, Card, Icon } from 'react-native-elements';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import StockService from '../services/StockService'
+import ChartService from '../services/ChartService'
 import { FlatList } from 'react-native';
 
 export default function Comments({ navigation, route }){
@@ -15,6 +16,7 @@ export default function Comments({ navigation, route }){
     const [error, setError] = useState(null);
     const [newCommentText, setNewCommentText] = useState("");
     const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const [commentSentiment, setCommentSentiment] = useState("");
 
     const addComments = (newComment) => {
         setComments([newComment, ...comments]);
@@ -40,6 +42,22 @@ export default function Comments({ navigation, route }){
 
         fetchComments()
     }, [setComments]
+    )
+
+    useEffect(() => {
+        async function fetchCommentSentiment() {
+            try{
+                const commentSentimentReq = await ChartService.getLatestStockCommentSentiment(ticker);
+                const commentSentimentData = commentSentimentReq.data;
+                setCommentSentiment(commentSentimentData);
+                console.log("comments sentiment: ")
+                console.log(commentSentiment)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchCommentSentiment()
+    }, [setCommentSentiment]
     )
 
     if (isLoading) {
@@ -122,6 +140,10 @@ export default function Comments({ navigation, route }){
             </Dialog>
         
     )
+    
+    const renderCommentSentiment = () => {
+        {(commentSentiment !== "") ? <Text style={styles.sentiment}>Comments Sentiment: {commentSentiment.toLowerCase() === "positive" ? <Text style={styles.sentimentPositive}> {commentSentiment}</Text> : (commentSentiment.toLowerCase() === "negative" ? <Text style={styles.sentimentNegative}> {commentSentiment}</Text> : <Text styles={styles.sentimentNeutral}> {commentSentiment}</Text>)}</Text>: <Text></Text>}
+    }
 
     const handleSubmissionAndClose = async () => {
         const postComment = {username: user, commentDateTime: Math.floor(Date.now()/1000), stockticker: ticker, comment: newCommentText}
@@ -144,15 +166,15 @@ export default function Comments({ navigation, route }){
     return(
         <Provider>
         <View style={{backgroundColor:'white', flex:1}}>
+            <Text></Text>
+            {comments.length !== 0 ? <Text style={styles.sentiment}>Comments Sentiment: {commentSentiment.toLowerCase() === "positive" ? <Text style={styles.sentimentPositive}> {commentSentiment}</Text> : (commentSentiment.toLowerCase() === "negative" ? <Text style={styles.sentimentNegative}> {commentSentiment}</Text> : <Text styles={styles.sentimentNeutral}> {commentSentiment}</Text>)}</Text> : <Text></Text>}
             {(comments.length !== 0) ? 
         <FlatList
             data={comments}
             renderItem={renderItem}
             keyExtractor={(item, index)=> 'key'+index}
-            extraData={comments}
-        />
-         
-        : <View></View> }
+            extraData={comments}/>
+        : <View><Text style={styles.noCommentsText}>There are no comments yet!</Text></View> }
         <AddCommentFAB />
         {renderAddCommentPopup()}
         </View>
@@ -198,5 +220,26 @@ const styles = StyleSheet.create({
     space: {
         width: 10,
         height: 20,
+    },
+    sentimentPositive: {
+        textTransform: 'uppercase',
+        color: "green"
+      },
+      sentimentNeutral: {
+        textTransform: 'uppercase',
+        color: "gray"
+      },
+      sentimentNegative: {
+        textTransform: 'uppercase',
+        color: "red"
+      },
+    sentiment: {
+        fontSize: 15,
+        fontWeight: "bold",
+        marginLeft: 30
+    },
+    noCommentsText: {
+        textAlign: "center",
+        fontSize: 15,
     }
 })
