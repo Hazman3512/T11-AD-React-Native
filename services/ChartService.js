@@ -7,6 +7,7 @@ const STOCK_CANDLE_API_URL = global.IP + "getCandleData/";
 const STOCK_PRICE_API_URL = global.IP + "getLatestPrice/";
 const STOCK_SENTIMENT_API_URL = global.IP + "getSentiment/";
 const STOCK_TOP5_API_URL = global.IP + "getStockSymbol/";
+const STOCK_COMMENT_SENTIMENT_API_URL = global.IP + "getCommentSentiment/";
 
 // https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1m&limit=1000
 class ChartService {
@@ -23,6 +24,11 @@ class ChartService {
   getLatestStockSentiment(ticker) {
     const url = STOCK_SENTIMENT_API_URL + ticker;
     return axios.get(url);
+  }
+
+  getLatestStockCommentSentiment(ticker) {
+    const url = STOCK_COMMENT_SENTIMENT_API_URL + ticker;
+    return axios.get(url)
   }
 
   getTop5Stock(searchTerm) {
