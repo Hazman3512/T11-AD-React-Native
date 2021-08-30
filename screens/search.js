@@ -111,6 +111,7 @@ export default function Search({navigation, route}) {
 
     navigation.navigate('Comments', {
     ticker: stockInfo.stockTicker,
+    companyName: stockInfo.companyName,
     user: user,
     });
   

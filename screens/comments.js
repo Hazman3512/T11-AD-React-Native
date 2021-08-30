@@ -9,7 +9,8 @@ import { FlatList } from 'react-native';
 
 export default function Comments({ navigation, route }){
 
-    const { ticker, user } = route.params;
+    const { ticker, companyName, user } = route.params;
+
 
     const [comments, setComments] = useState([])
     const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +133,7 @@ export default function Comments({ navigation, route }){
                 <TouchableOpacity 
                 style={styles.button}
                 onPress={() => {
+                    
                     handleSubmissionAndClose();
                     }}>
                 <Text>Submit</Text>
@@ -146,7 +148,8 @@ export default function Comments({ navigation, route }){
     }
 
     const handleSubmissionAndClose = async () => {
-        const postComment = {username: user, commentDateTime: Math.floor(Date.now()/1000), stockticker: ticker, comment: newCommentText}
+        const postComment = {username: user, commentDateTime: Math.floor(Date.now()/1000), stockticker: ticker, comment: newCommentText, stockname: companyName}
+        console.log(postComment);
         try {
             const Resp = await StockService.postStockComment(ticker, postComment)
             const data = Resp.data;
