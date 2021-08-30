@@ -101,7 +101,7 @@ export default function Settings({ navigation, route }) {
               toggleState["checked" + (index + 1)]
             ? "0"
             : candleReqData[index].datetime !== "0"
-            ? new Date(candleReqData[index].datetime).getTime() / 1000
+            ? new Date(candleReqData[index].datetime).getTime() / 1000 - 28800
             : "0",
       };
     });
