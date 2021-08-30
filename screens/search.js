@@ -1,10 +1,9 @@
 import React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react'
-//import { FlatList } from 'react-native';
-import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage, Image, Dimensions } from 'react-native';
+import { ScrollView, ActivityIndicator, ToastAndroid, AsyncStorage,  Dimensions } from 'react-native';
 import { ImageBackground } from 'react-native';
 import {View, StyleSheet} from 'react-native';
-import { Button, Searchbar, Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import ChartService from '../services/ChartService';
 import StorageDataService from '../services/StorageDataService';
 import WatchlistService from '../services/WatchlistService';

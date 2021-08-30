@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {
-  TouchableOpacity,
   StyleSheet,
   View,
   Switch,
-  ScrollView,
   Image,
   ToastAndroid,
 } from "react-native";
 import {
   Button,
-  Subheading,
   Text,
   Card,
   Title,
-  Paragraph,
 } from "react-native-paper";
-import { Picker as SelectPicker } from "@react-native-picker/picker";
 import { FlatList } from "react-native";
-import { Navigation } from "@material-ui/icons";
 import WatchlistService from "../services/WatchlistService";
 
 export default function Settings({ navigation, route }) {

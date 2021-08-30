@@ -2,8 +2,6 @@ import "react-native-gesture-handler";
 import React, { useState } from "react";
 import {
   NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
   getFocusedRouteNameFromRoute,
 } from "@react-navigation/native";
 import SignIn from "./screens/signIn";
@@ -13,7 +11,7 @@ import MainTabScreen from "./screens/MainTabScreen";
 import Comments from "./screens/comments";
 import { useEffect } from "react";
 import { ActivityIndicator } from "react-native-paper";
-import { Image, StyleSheet, View, Text } from "react-native";
+import {  View } from "react-native";
 import CustomNavigationBar from "./screens/layout/CustomNavigationBar";
 import Register from "./screens/register";
 import Settings from "./screens/settings";
@@ -47,6 +45,7 @@ export default function App() {
   const Stack = createStackNavigator();
   const [isLoading, setIsLoading] = React.useState(true);
   const [userToken, setUserToken] = React.useState(null);
+  
 
   const authContext = React.useMemo(() => ({
     signIn: () => {

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
-import { FAB, TextInput, Provider, Portal, Dialog} from 'react-native-paper';
-import { Button, Text, Card, Icon } from 'react-native-elements';
+import { FAB, TextInput, Provider, Dialog} from 'react-native-paper';
+import {  Text, Card, Icon } from 'react-native-elements';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import StockService from '../services/StockService'
 import ChartService from '../services/ChartService'
@@ -133,7 +133,7 @@ export default function Comments({ navigation, route }){
                 <TouchableOpacity 
                 style={styles.button}
                 onPress={() => {
-                    
+
                     handleSubmissionAndClose();
                     }}>
                 <Text>Submit</Text>

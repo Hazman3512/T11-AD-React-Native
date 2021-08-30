@@ -10,12 +10,11 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { Button } from "react-native-paper";
 import { MaterialIcons } from "@expo/vector-icons";
 import StorageDataService from "../services/StorageDataService";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import WatchlistService from "../services/WatchlistService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from 'react-native-elements';
-import { TouchableWithoutFeedback } from "react-native";
 
 export default function WatchList({ navigation, route }) {
   const isFocused = useIsFocused();

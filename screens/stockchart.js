@@ -1,6 +1,5 @@
 import React from 'react';
 import {View} from 'react-native';
-//import ChartService from '../services/ChartService'
 import { WebView } from 'react-native-webview';
  
 export default function Stockchart({navigation, route}) {
